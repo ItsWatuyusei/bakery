@@ -660,6 +660,7 @@ class BakeryApp {
   setupScrollEffects() {
     const progress = document.getElementById('scrollProgress');
     const backToTop = document.getElementById('backToTop');
+    const cartToggle = document.getElementById('cartToggle');
 
     window.addEventListener('scroll', () => {
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
@@ -673,6 +674,14 @@ class BakeryApp {
           backToTop.classList.add('active');
         } else {
           backToTop.classList.remove('active');
+        }
+      }
+
+      if (cartToggle) {
+        if (winScroll > 200 && this.cart.length > 0) {
+          cartToggle.classList.add('sticky');
+        } else {
+          cartToggle.classList.remove('sticky');
         }
       }
     });
