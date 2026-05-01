@@ -1,6 +1,12 @@
 const CONFIG = {
+  settings: {
+    profitMargin: 60, // Percentage margin to add to base prices
+  },
   brand: {
-    name: 'ItsWatuyusei Bakery',
+    name: {
+      en: 'ItsWatuyusei Bakery',
+      es: 'Panadería ItsWatuyusei'
+    },
     poweredBy: 'ItsWatuyusei',
     poweredByUrl: 'https://itswatuyusei.com',
     isWhitelabel: false,
@@ -78,7 +84,7 @@ const CONFIG = {
       id: 'prod_01',
       name: { en: 'Catalinas', es: 'Catalinas' },
       category: 'sweet',
-      price: 2.67,
+      price: 1.2,
       badge: 'bestseller',
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/catalinas00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/catalinas01.webp'],
       description: {
@@ -90,7 +96,7 @@ const CONFIG = {
       id: 'prod_02',
       name: { en: 'Polvorosas', es: 'Polvorosas' },
       category: 'sweet',
-      price: 2.94,
+      price: 1.2,
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj3rdUKWy9pyKhSWyqfRwXB_mLb_XQ0wrl4w&s',
       description: {
         en: 'Crumbly, melt-in-your-mouth shortbread cookies dusted with powdered sugar.',
@@ -135,7 +141,7 @@ const CONFIG = {
       id: 'prod_06',
       name: { en: 'Arequipe Pastry', es: 'Pastel de Arequipe' },
       category: 'sweet',
-      price: 2.40,
+      price: 1.5,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/pastelArequipe00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/pastelArequipe01.webp'],
       description: {
         en: 'Flaky puff pastry pocket filled with creamy caramel (arequipe).',
@@ -146,7 +152,7 @@ const CONFIG = {
       id: 'prod_07',
       name: { en: 'Guava Pastry', es: 'Pastel de Guayaba' },
       category: 'sweet',
-      price: 2.40,
+      price: 1.5,
       badge: 'bestseller',
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/pastelGuayaba00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/pastelGuayaba01.webp'],
       description: {
@@ -158,7 +164,7 @@ const CONFIG = {
       id: 'prod_08',
       name: { en: 'Cheese Bread', es: 'Pan de Queso' },
       category: 'savory',
-      price: 1.99,
+      price: 1.5,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panQueso00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panQueso01.webp'],
       description: {
         en: 'Soft bread filled and topped with salty white cheese.',
@@ -169,7 +175,7 @@ const CONFIG = {
       id: 'prod_09',
       name: { en: 'Quesadilla', es: 'Quesadilla' },
       category: 'sweet',
-      price: 2.40,
+      price: 1.5,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/quesadilla00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/quesadilla01.webp'],
       description: {
         en: 'Venezuelan sweet pastry filled with a sweet cheese mixture.',
@@ -191,7 +197,7 @@ const CONFIG = {
       id: 'prod_11',
       name: { en: 'French Bread', es: 'Pan Salado (Francés)' },
       category: 'savory',
-      price: 1.76,
+      price: 1.1,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panSalado00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panSalado01.webp'],
       description: {
         en: 'Classic Venezuelan bakery French bread, crusty outside and soft inside.',
@@ -202,7 +208,7 @@ const CONFIG = {
       id: 'prod_12',
       name: { en: 'Canilla Bread', es: 'Pan Salado (Canilla)' },
       category: 'savory',
-      price: 1.92,
+      price: 1.2,
       badge: 'new',
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panSalado00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panSalado01.webp'],
       description: {
@@ -237,7 +243,7 @@ const CONFIG = {
       id: 'prod_15',
       name: { en: 'Milk Bread', es: 'Pan de Leche' },
       category: 'sweet',
-      price: 1.3,
+      price: 1.1,
       image: [],
       description: {
         en: 'Super soft and fluffy bread rolls made with fresh milk.',
@@ -248,11 +254,22 @@ const CONFIG = {
       id: 'prod_16',
       name: { en: 'Pinita Bread', es: 'Pan Piñita' },
       category: 'sweet',
-      price: 1.3,
+      price: 1.1,
       image: [],
       description: {
         en: 'Traditional sweet bread with a sugary crust and a hint of vanilla.',
         es: 'Pan dulce tradicional con costra de azúcar y un toque de vainilla.'
+      }
+    },
+    {
+      id: 'prod_17',
+      name: { en: 'Girl\'s Bread', es: 'Pan de Niña (Pecho de Niña)' },
+      category: 'sweet',
+      price: 1.1,
+      image: [],
+      description: {
+        en: 'Delicate and soft sweet bread, a classic of Venezuelan bakeries.',
+        es: 'Pan dulce delicado y suave, un clásico de las panaderías venezolanas.'
       }
     }
   ]

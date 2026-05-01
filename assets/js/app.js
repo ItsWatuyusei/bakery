@@ -17,6 +17,11 @@ class BakeryApp {
     this.init();
   }
 
+  calculatePrice(basePrice) {
+    const margin = this.config.settings?.profitMargin || 0;
+    return basePrice * (1 + (margin / 100));
+  }
+
   getImagePath(path) {
     if (!path) return 'https://via.placeholder.com/400?text=Bakery';
     if (path.startsWith('http')) return path;
@@ -34,6 +39,9 @@ class BakeryApp {
   detectLanguage() {
     const savedLang = localStorage.getItem('lang');
     if (savedLang && this.config.i18n[savedLang]) return savedLang;
+
+    const browserLang = navigator.language.split('-')[0];
+    if (this.config.i18n[browserLang]) return browserLang;
 
     return 'en';
   }
@@ -130,6 +138,18 @@ class BakeryApp {
 
   renderStaticContent() {
     const t = this.config.i18n[this.currentLang];
+    
+    // Update SEO and Page Title
+    document.title = `${this.config.brand.name[this.currentLang]} | ${this.config.brand.poweredBy}`;
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.content = this.currentLang === 'es' ? 
+      'Explora nuestros deliciosos productos de panadería artesanal. Dulces y salados hechos frescos cada día.' : 
+      'Explore our delicious artisan bakery products. Sweet and savory delights made fresh daily.';
+
+    // Update Header
+    const h1 = document.querySelector('header h1');
+    if (h1) h1.textContent = this.config.brand.name[this.currentLang];
+
     const searchInput = document.getElementById('searchInput');
     const filterAll = document.getElementById('filterAll');
     const filterSweet = document.getElementById('filterSweet');
@@ -142,7 +162,7 @@ class BakeryApp {
     
     const footer = document.querySelector('footer');
     if (footer) {
-      footer.innerHTML = `<p>Copyright © <a href="https://itswatuyusei.com" target="_blank" rel="noopener noreferrer">ItsWatuyusei</a></p>`;
+      footer.innerHTML = `<p>${t.copyright} <a href="${this.config.brand.poweredByUrl}" target="_blank" rel="noopener noreferrer">${this.config.brand.poweredBy}</a></p>`;
     }
 
     const cartTitle = document.getElementById('cartTitle');
@@ -156,6 +176,8 @@ class BakeryApp {
     if (totalBcvLabel) totalBcvLabel.textContent = t.totalBcv;
     if (checkoutBtn) checkoutBtn.textContent = t.sendOrder;
     if (clearCartBtn) clearCartBtn.textContent = t.clearCart;
+
+    this.updateLangSwitcher();
   }
 
   renderProducts() {
@@ -188,7 +210,7 @@ class BakeryApp {
         <div class="product-info">
           <div class="product-category">${this.config.i18n[this.currentLang][p.category]}</div>
           <h3 class="product-name">${p.name[this.currentLang]}</h3>
-          <div class="product-price">$${p.price.toFixed(2)}</div>
+          <div class="product-price">$${this.calculatePrice(p.price).toFixed(2)}</div>
         </div>
       </div>
     `).join('');
@@ -391,7 +413,7 @@ class BakeryApp {
 
     document.getElementById('modalName').textContent = p.name[this.currentLang];
     document.getElementById('modalDescription').textContent = p.description ? p.description[this.currentLang] : '';
-    document.getElementById('modalPrice').textContent = `$${p.price.toFixed(2)}`;
+    document.getElementById('modalPrice').textContent = `$${this.calculatePrice(p.price).toFixed(2)}`;
 
     const addToCartBtn = document.getElementById('addToCartBtn');
     if (addToCartBtn) {
@@ -577,13 +599,14 @@ class BakeryApp {
     if (clearCartBtn) clearCartBtn.disabled = false;
     let total = 0;
     container.innerHTML = this.cart.map((item, index) => {
-      total += item.price;
+      const itemPrice = this.calculatePrice(item.price);
+      total += itemPrice;
       return `
         <div class="cart-item">
           <img src="${this.getImagePath(Array.isArray(item.image) ? item.image[0] : item.image)}" class="cart-item-img">
           <div class="cart-item-info">
             <div class="cart-item-name">${item.name[this.currentLang]}</div>
-            <div class="cart-item-price">$${item.price.toFixed(2)}</div>
+            <div class="cart-item-price">$${itemPrice.toFixed(2)}</div>
           </div>
           <button class="remove-item" onclick="bakeryApp.removeFromCart(${index})">&times;</button>
         </div>
@@ -608,16 +631,18 @@ class BakeryApp {
     const itemCounts = {};
     this.cart.forEach(item => {
       const name = item.name[this.currentLang];
+      const itemPrice = this.calculatePrice(item.price);
       if (!itemCounts[name]) {
         itemCounts[name] = { count: 0, price: item.price };
       }
       itemCounts[name].count += 1;
-      total += item.price;
+      total += itemPrice;
     });
 
     Object.keys(itemCounts).forEach(name => {
       const data = itemCounts[name];
-      const itemTotal = data.count * data.price;
+      const itemPrice = this.calculatePrice(data.price);
+      const itemTotal = data.count * itemPrice;
       message += `- ${name} x${data.count} ($${itemTotal.toFixed(2)})\n`;
     });
     
