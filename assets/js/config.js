@@ -233,7 +233,7 @@ const CONFIG = {
       name: { en: 'Coconut Cookies', es: 'Galletas de Coco' },
       category: 'sweet',
       price: 1.3,
-      image: [],
+      image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDF7fSTw92GVAq7sECTcDgRUB7tGF8ofY6fg&s'],
       description: {
         en: 'Delicious crunchy cookies with a rich coconut flavor.',
         es: 'Deliciosas galletas crujientes con un intenso sabor a coco.'
@@ -244,7 +244,7 @@ const CONFIG = {
       name: { en: 'Milk Bread', es: 'Pan de Leche' },
       category: 'sweet',
       price: 1.1,
-      image: [],
+      image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4u68A4SPTPrxPPJNy7pSTYmEq8YAW8wZySA&s'],
       description: {
         en: 'Super soft and fluffy bread rolls made with fresh milk.',
         es: 'Panecillos súper suaves y esponjosos hechos con leche fresca.'
@@ -255,7 +255,7 @@ const CONFIG = {
       name: { en: 'Pinita Bread', es: 'Pan Piñita' },
       category: 'sweet',
       price: 1.1,
-      image: [],
+      image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSD4DajMk5cOEANh23U9mkuB3QtR7hKMzMI3A&s'],
       description: {
         en: 'Traditional sweet bread with a sugary crust and a hint of vanilla.',
         es: 'Pan dulce tradicional con costra de azúcar y un toque de vainilla.'
@@ -266,7 +266,7 @@ const CONFIG = {
       name: { en: 'Girl\'s Bread', es: 'Pan de Niña (Pecho de Niña)' },
       category: 'sweet',
       price: 1.1,
-      image: [],
+      image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeIs6NsclrbHEMZ6ZF3FJ_q9K_dt6bGTP8qw&s'],
       description: {
         en: 'Delicate and soft sweet bread, a classic of Venezuelan bakeries.',
         es: 'Pan dulce delicado y suave, un clásico de las panaderías venezolanas.'
