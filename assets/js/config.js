@@ -195,7 +195,7 @@ const CONFIG = {
     },
     {
       id: 'prod_11',
-      name: { en: 'French Bread', es: 'Pan Salado (Francés)' },
+      name: { en: 'French Bread', es: 'Pan Francés' },
       category: 'savory',
       price: 1.1,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panSalado00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panSalado01.webp'],
@@ -206,7 +206,7 @@ const CONFIG = {
     },
     {
       id: 'prod_12',
-      name: { en: 'Canilla Bread', es: 'Pan Salado (Canilla)' },
+      name: { en: 'Canilla Bread', es: 'Pan Canilla' },
       category: 'savory',
       price: 1.2,
       badge: 'new',
@@ -263,7 +263,7 @@ const CONFIG = {
     },
     {
       id: 'prod_17',
-      name: { en: 'Girl\'s Bread', es: 'Pan de Niña (Pecho de Niña)' },
+      name: { en: 'Pecho de Niña', es: 'Pecho de Niña' },
       category: 'sweet',
       price: 1.1,
       image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeIs6NsclrbHEMZ6ZF3FJ_q9K_dt6bGTP8qw&s'],
