@@ -666,13 +666,16 @@ class BakeryApp {
   }
 
   setupScrollEffects() {
-    const progress = document.getElementById('scrollProgress');
-    const backToTop = document.getElementById('backToTop');
-    const cartToggle = document.getElementById('cartToggle');
     window.addEventListener('scroll', () => {
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
+      
+      const progress = document.getElementById('scrollProgress');
+      const backToTop = document.getElementById('backToTop');
+      const cartToggle = document.getElementById('cartToggle');
+      const langToggle = document.getElementById('langToggle');
+
       if (progress) progress.style.width = scrolled + "%";
       if (backToTop) {
         if (winScroll > 300) {
@@ -686,6 +689,13 @@ class BakeryApp {
           cartToggle.classList.add('sticky');
         } else {
           cartToggle.classList.remove('sticky');
+        }
+      }
+      if (langToggle) {
+        if (winScroll > 200) {
+          langToggle.classList.add('sticky');
+        } else {
+          langToggle.classList.remove('sticky');
         }
       }
     });
