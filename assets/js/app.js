@@ -387,7 +387,7 @@ class BakeryApp {
     }
     document.getElementById('modalName').textContent = p.name[this.currentLang];
     document.getElementById('modalDescription').textContent = p.description ? p.description[this.currentLang] : '';
-    document.getElementById('modalPrice').innerHTML = `<span>$${this.calculatePrice(p.price).toFixed(2)}</span><span id="modalCartStatus" class="modal-cart-status"></span>`;
+    document.getElementById('modalPrice').textContent = `$${this.calculatePrice(p.price).toFixed(2)}`;
     
     this.modalQty = 1;
     this.updateModalQtyUI();

@@ -621,11 +621,18 @@ footer a:hover {
   border-top: 1px solid var(--border);
 }
 
+.modal-status-container {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 20px;
+  margin-top: -0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .modal-cart-status {
   font-size: 0.72rem;
   color: var(--foreground);
   font-weight: 500;
-  margin-left: 0.5rem;
   opacity: 0.45;
   display: none;
   font-style: italic;
@@ -633,7 +640,7 @@ footer a:hover {
 
 .modal-cart-status::before {
   content: '•';
-  margin-right: 0.5rem;
+  margin-right: 0.4rem;
   color: var(--border);
 }
 
