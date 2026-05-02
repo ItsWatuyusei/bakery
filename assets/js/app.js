@@ -113,7 +113,7 @@ class BakeryApp {
   }
 
   changeLanguage() {
-    const langs = ['en', 'es'];
+    const langs = ['en', 'es', 'pt'];
     const nextIndex = (langs.indexOf(this.currentLang) + 1) % langs.length;
     this.currentLang = langs[nextIndex];
     localStorage.setItem('lang', this.currentLang);
