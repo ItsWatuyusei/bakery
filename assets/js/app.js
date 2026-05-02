@@ -13,7 +13,7 @@ class BakeryApp {
     this.itemsPerPage = 9;
     this.promoIndex = 0;
     this.cart = JSON.parse(localStorage.getItem('bakery_cart')) || [];
-    
+    this.modalQty = 1;
     this.init();
   }
 
@@ -39,10 +39,8 @@ class BakeryApp {
   detectLanguage() {
     const savedLang = localStorage.getItem('lang');
     if (savedLang && this.config.i18n[savedLang]) return savedLang;
-
     const browserLang = navigator.language.split('-')[0];
     if (this.config.i18n[browserLang]) return browserLang;
-
     return 'en';
   }
 
@@ -71,10 +69,8 @@ class BakeryApp {
     const el = document.getElementById('promoText');
     if (el) {
       const promos = this.config.i18n[this.currentLang].promos;
-
       el.style.animation = 'none';
       el.offsetHeight; 
-
       el.style.animation = '';
       el.textContent = promos[this.promoIndex];
     }
@@ -93,13 +89,11 @@ class BakeryApp {
         this.updateBcvDisplay();
       }
     } catch (e) {
-
       console.warn('[Bs. Rate] Could not fetch rate from API:', e.message);
     }
   }
 
   updateBcvDisplay() {
-
     if (document.getElementById('cartDrawer')?.classList.contains('active')) {
       this.renderCart();
     }
@@ -107,7 +101,6 @@ class BakeryApp {
 
   initTheme() {
     const savedTheme = localStorage.getItem('theme');
-
     if (savedTheme === 'dark') {
       document.body.classList.add('dark-mode');
     }
@@ -139,14 +132,16 @@ class BakeryApp {
   renderStaticContent() {
     const t = this.config.i18n[this.currentLang];
     
-    // Update SEO and Page Title
     document.title = `${this.config.brand.name[this.currentLang]} | ${this.config.brand.poweredBy}`;
     const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.content = this.currentLang === 'es' ? 
-      'Explora nuestros deliciosos productos de panadería artesanal. Dulces y salados hechos frescos cada día.' : 
-      'Explore our delicious artisan bakery products. Sweet and savory delights made fresh daily.';
+    if (metaDesc) {
+      const descriptions = {
+        en: 'Explore our delicious artisan bakery products. Sweet and savory delights made fresh daily.',
+        es: 'Explora nuestros deliciosos productos de panadería artesanal. Dulces y salados hechos frescos cada día.'
+      };
+      metaDesc.content = descriptions[this.currentLang];
+    }
 
-    // Update Header
     const h1 = document.querySelector('header h1');
     if (h1) h1.textContent = this.config.brand.name[this.currentLang];
 
@@ -162,7 +157,16 @@ class BakeryApp {
     
     const footer = document.querySelector('footer');
     if (footer) {
-      footer.innerHTML = `<p>${t.copyright} <a href="${this.config.brand.poweredByUrl}" target="_blank" rel="noopener noreferrer">${this.config.brand.poweredBy}</a></p>`;
+      const year = new Date().getFullYear();
+      const brand = this.config.brand;
+      const link = `<a href="${brand.poweredByUrl}" target="_blank" rel="noopener noreferrer">${brand.poweredBy}</a>`;
+      let copyrightText = '';
+      if (brand.isWhitelabel) {
+        copyrightText = `${t.copyright} ${year} ${brand.name[this.currentLang]} | ${t.poweredBy} ${link}`;
+      } else {
+        copyrightText = `${t.copyright} ${link}`;
+      }
+      footer.innerHTML = `<p>${copyrightText}</p>`;
     }
 
     const cartTitle = document.getElementById('cartTitle');
@@ -183,24 +187,20 @@ class BakeryApp {
   renderProducts() {
     const grid = document.getElementById('productsGrid');
     if (!grid) return;
-
     const filtered = this.config.products.filter(p => {
       const matchesCategory = this.currentCategory === 'all' || p.category === this.currentCategory;
       const matchesSearch = p.name[this.currentLang].toLowerCase().includes(this.searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-
     const totalPages = Math.ceil(filtered.length / this.itemsPerPage);
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     const paginatedItems = filtered.slice(start, end);
-
     if (filtered.length === 0) {
       grid.innerHTML = `<p class="no-results">${this.config.i18n[this.currentLang].noResults}</p>`;
       this.renderPagination(0);
       return;
     }
-
     grid.innerHTML = paginatedItems.map((p, index) => `
       <div class="product-card" style="animation-delay: ${index * 0.1}s" onclick="bakeryApp.openProduct('${p.id}')">
         ${p.badge ? `<div class="product-badge ${p.badge}">${this.config.i18n[this.currentLang][p.badge]}</div>` : ''}
@@ -214,19 +214,16 @@ class BakeryApp {
         </div>
       </div>
     `).join('');
-
     this.renderPagination(totalPages);
   }
 
   renderPagination(totalPages) {
     const container = document.getElementById('pagination');
     if (!container) return;
-
     if (totalPages <= 1) {
       container.innerHTML = '';
       return;
     }
-
     let html = '';
     for (let i = 1; i <= totalPages; i++) {
       html += `
@@ -236,14 +233,12 @@ class BakeryApp {
       `;
     }
     container.innerHTML = html;
-
   }
 
   setupEventListeners() {
     const themeToggle = document.getElementById('themeToggle');
     const searchInput = document.getElementById('searchInput');
     const filterBtns = document.querySelectorAll('.filter-btn');
-
     if (themeToggle) {
       themeToggle.replaceWith(themeToggle.cloneNode(true));
       document.getElementById('themeToggle').addEventListener('click', () => {
@@ -251,7 +246,6 @@ class BakeryApp {
         this.playSound('click');
       });
     }
-
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
         this.searchQuery = e.target.value;
@@ -259,7 +253,6 @@ class BakeryApp {
         this.renderProducts();
       });
     }
-
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
@@ -270,7 +263,6 @@ class BakeryApp {
         this.playSound('tick');
       });
     });
-
     const paginationContainer = document.getElementById('pagination');
     if (paginationContainer) {
       paginationContainer.addEventListener('click', (e) => {
@@ -290,7 +282,6 @@ class BakeryApp {
         }
       });
     }
-
     const langToggle = document.getElementById('langToggle');
     if (langToggle) {
       langToggle.replaceWith(langToggle.cloneNode(true));
@@ -299,7 +290,6 @@ class BakeryApp {
         this.playSound('tick');
       });
     }
-
     const backToTop = document.getElementById('backToTop');
     if (backToTop) {
       backToTop.addEventListener('click', () => {
@@ -307,46 +297,38 @@ class BakeryApp {
         this.playSound('click');
       });
     }
-
     const closeModal = document.getElementById('closeModal');
     if (closeModal) {
       closeModal.addEventListener('click', () => this.closeProduct());
     }
-
     const cartToggle = document.getElementById('cartToggle');
     if (cartToggle) {
       cartToggle.addEventListener('click', () => this.toggleCart(true));
     }
-
     const closeCart = document.getElementById('closeCart');
     if (closeCart) {
       closeCart.addEventListener('click', () => this.toggleCart(false));
     }
-
     const checkoutBtn = document.getElementById('checkoutBtn');
     if (checkoutBtn) {
       checkoutBtn.addEventListener('click', () => this.checkout());
     }
-
     const clearCartBtn = document.getElementById('clearCartBtn');
     if (clearCartBtn) {
       clearCartBtn.addEventListener('click', () => this.clearCart());
     }
-
     window.addEventListener('click', (e) => {
       const modal = document.getElementById('productModal');
       const cartOverlay = document.getElementById('cartOverlay');
       if (e.target === modal) this.closeProduct();
       if (e.target === cartOverlay) this.toggleCart(false);
     });
-
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         this.closeProduct();
         this.toggleCart(false);
       }
     });
-
     this.setupSecurity();
   }
 
@@ -354,15 +336,11 @@ class BakeryApp {
     if (!this.audioCtx) {
       this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
-
     const osc = this.audioCtx.createOscillator();
     const gain = this.audioCtx.createGain();
-
     osc.connect(gain);
     gain.connect(this.audioCtx.destination);
-
     const now = this.audioCtx.currentTime;
-
     if (type === 'pop') {
       osc.type = 'sine';
       osc.frequency.setValueAtTime(200, now);
@@ -391,15 +369,12 @@ class BakeryApp {
   openProduct(id) {
     const p = this.config.products.find(item => item.id === id);
     if (!p) return;
-
     const modal = document.getElementById('productModal');
     const t = this.config.i18n[this.currentLang];
-
     this.currentProduct = p;
     this.currentImageIndex = 0;
     this.renderModalImage();
     document.getElementById('modalCategory').textContent = t[p.category];
-    
     const modalBadge = document.getElementById('modalBadge');
     if (modalBadge) {
       if (p.badge) {
@@ -410,27 +385,62 @@ class BakeryApp {
         modalBadge.style.display = 'none';
       }
     }
-
     document.getElementById('modalName').textContent = p.name[this.currentLang];
     document.getElementById('modalDescription').textContent = p.description ? p.description[this.currentLang] : '';
-    document.getElementById('modalPrice').textContent = `$${this.calculatePrice(p.price).toFixed(2)}`;
+    document.getElementById('modalPrice').innerHTML = `<span>$${this.calculatePrice(p.price).toFixed(2)}</span><span id="modalCartStatus" class="modal-cart-status"></span>`;
+    
+    this.modalQty = 1;
+    this.updateModalQtyUI();
 
     const addToCartBtn = document.getElementById('addToCartBtn');
     if (addToCartBtn) {
       addToCartBtn.textContent = t.addToCart;
-      addToCartBtn.onclick = () => this.addToCart(p);
+      addToCartBtn.onclick = () => this.addToCart(p, this.modalQty);
     }
-
     const buyBtn = document.getElementById('buyButton');
     if (buyBtn) {
       const message = encodeURIComponent(`${t.orderMessage}${p.name[this.currentLang]}`);
       buyBtn.href = `https://wa.me/${this.config.brand.whatsapp}?text=${message}`;
       buyBtn.textContent = t.buy;
     }
-
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     this.playSound('pop');
+  }
+
+  updateModalQty(delta) {
+    this.modalQty = Math.max(1, this.modalQty + delta);
+    this.updateModalQtyUI();
+    this.playSound('tick');
+  }
+
+  updateModalQtyUI() {
+    const qtyEl = document.getElementById('modalQty');
+    const minusBtn = document.getElementById('qtyMinus');
+    const statusEl = document.getElementById('modalCartStatus');
+    
+    if (qtyEl) qtyEl.textContent = this.modalQty;
+    if (minusBtn) minusBtn.disabled = this.modalQty <= 1;
+
+    const p = this.currentProduct;
+    const t = this.config.i18n[this.currentLang];
+    
+    if (statusEl && p && t) {
+      const inCart = this.cart.find(item => item.id === p.id);
+      if (inCart) {
+        statusEl.textContent = `(${inCart.quantity} ${t.alreadyInCart})`;
+        statusEl.style.display = 'inline-block';
+      } else {
+        statusEl.style.display = 'none';
+      }
+    }
+
+    const buyBtn = document.getElementById('buyButton');
+    if (buyBtn && p && t) {
+      const qtyStr = this.modalQty > 1 ? ` (x${this.modalQty})` : '';
+      const message = encodeURIComponent(`${t.orderMessage}${p.name[this.currentLang]}${qtyStr}`);
+      buyBtn.href = `https://wa.me/${this.config.brand.whatsapp}?text=${message}`;
+    }
   }
 
   closeProduct() {
@@ -446,9 +456,7 @@ class BakeryApp {
     const p = this.currentProduct;
     const container = document.getElementById('modalImageContainer');
     if (!container) return;
-    
     const images = Array.isArray(p.image) ? p.image : [p.image];
-    
     if (images.length > 1) {
       container.innerHTML = `
         <img id="modalImage" src="${this.getImagePath(images[this.currentImageIndex])}" alt="" class="modal-image">
@@ -485,17 +493,25 @@ class BakeryApp {
     this.renderModalImage();
   }
 
-  addToCart(product) {
+  addToCart(product, qty = 1) {
     const modalImg = document.getElementById('modalImage');
     if (modalImg) {
       this.flyToCart(modalImg);
     }
-    
-    this.cart.push(product);
+
+    const existingIndex = this.cart.findIndex(item => item.id === product.id);
+    if (existingIndex > -1) {
+      if (typeof this.cart[existingIndex].quantity === 'number') {
+        this.cart[existingIndex].quantity += qty;
+      } else {
+        this.cart[existingIndex].quantity = (this.cart[existingIndex].quantity || 1) + qty;
+      }
+    } else {
+      this.cart.push({ ...product, quantity: qty });
+    }
+
     localStorage.setItem('bakery_cart', JSON.stringify(this.cart));
     this.updateCartCount();
-    
-    // Delay closing to let animation start
     setTimeout(() => {
       this.closeProduct();
       this.playSound('tick');
@@ -505,10 +521,8 @@ class BakeryApp {
   flyToCart(startElement) {
     const cartIcon = document.getElementById('cartToggle');
     if (!cartIcon || !startElement) return;
-
     const startRect = startElement.getBoundingClientRect();
     const cartRect = cartIcon.getBoundingClientRect();
-
     const flyingImg = document.createElement('img');
     flyingImg.src = startElement.src;
     flyingImg.className = 'flying-item';
@@ -516,9 +530,7 @@ class BakeryApp {
     flyingImg.style.top = `${startRect.top}px`;
     flyingImg.style.width = `${startRect.width}px`;
     flyingImg.style.height = `${startRect.height}px`;
-
     document.body.appendChild(flyingImg);
-
     setTimeout(() => {
       flyingImg.style.left = `${cartRect.left + cartRect.width / 2}px`;
       flyingImg.style.top = `${cartRect.top + cartRect.height / 2}px`;
@@ -527,7 +539,6 @@ class BakeryApp {
       flyingImg.style.opacity = '0.5';
       flyingImg.style.transform = 'rotate(360deg)';
     }, 10);
-
     setTimeout(() => {
       flyingImg.remove();
       cartIcon.classList.add('cart-shake');
@@ -555,7 +566,6 @@ class BakeryApp {
     const drawer = document.getElementById('cartDrawer');
     const overlay = document.getElementById('cartOverlay');
     if (!drawer || !overlay) return;
-    
     if (show) {
       drawer.classList.add('active');
       overlay.classList.add('active');
@@ -570,12 +580,14 @@ class BakeryApp {
 
   updateCartCount() {
     const btn = document.getElementById('cartToggle');
-    const count = document.getElementById('cartCount');
-    if (!btn || !count) return;
-
-    const hasItems = this.cart.length > 0;
+    const countEl = document.getElementById('cartCount');
+    if (!btn || !countEl) return;
+    
+    const totalQty = this.cart.reduce((sum, item) => sum + (parseInt(item.quantity) || 1), 0);
+    const hasItems = totalQty > 0;
+    
     btn.classList.toggle('hidden', !hasItems);
-    count.textContent = this.cart.length;
+    countEl.textContent = totalQty;
   }
 
   renderCart() {
@@ -585,7 +597,7 @@ class BakeryApp {
     const checkoutBtn = document.getElementById('checkoutBtn');
     const clearCartBtn = document.getElementById('clearCartBtn');
     const t = this.config.i18n[this.currentLang];
-
+    
     if (this.cart.length === 0) {
       container.innerHTML = `<div class="no-results" style="margin-top: 50%">${t.emptyCart}</div>`;
       totalEl.textContent = '$0.00';
@@ -594,27 +606,35 @@ class BakeryApp {
       if (clearCartBtn) clearCartBtn.disabled = true;
       return;
     }
-
+    
     if (checkoutBtn) checkoutBtn.disabled = false;
     if (clearCartBtn) clearCartBtn.disabled = false;
+    
     let total = 0;
     container.innerHTML = this.cart.map((item, index) => {
-      const itemPrice = this.calculatePrice(item.price);
-      total += itemPrice;
+      const qty = parseInt(item.quantity) || 1;
+      const unitPrice = this.calculatePrice(item.price);
+      const itemTotal = unitPrice * qty;
+      total += itemTotal;
+      
       return `
         <div class="cart-item">
           <img src="${this.getImagePath(Array.isArray(item.image) ? item.image[0] : item.image)}" class="cart-item-img">
           <div class="cart-item-info">
-            <div class="cart-item-name">${item.name[this.currentLang]}</div>
-            <div class="cart-item-price">$${itemPrice.toFixed(2)}</div>
+            <div class="cart-item-name">${item.name[this.currentLang]} <span class="cart-item-qty">x${qty}</span></div>
+            <div class="cart-item-price">$${unitPrice.toFixed(2)}</div>
+            <div class="cart-item-subtotal">$${itemTotal.toFixed(2)}</div>
           </div>
-          <button class="remove-item" onclick="bakeryApp.removeFromCart(${index})">&times;</button>
+          <div class="cart-item-actions">
+            <button class="cart-item-remove" onclick="bakeryApp.removeFromCart(${index})" aria-label="Remove item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
         </div>
       `;
     }).join('');
-
+    
     totalEl.textContent = `$${total.toFixed(2)}`;
-
     if (this.config.bcvRate) {
       const totalBs = total * this.config.bcvRate;
       if (totalBcvEl) totalBcvEl.textContent = `Bs. ${totalBs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -627,32 +647,20 @@ class BakeryApp {
     const t = this.config.i18n[this.currentLang];
     let total = 0;
     let message = `${t.checkoutMessage}\n\n`;
-    
-    const itemCounts = {};
     this.cart.forEach(item => {
       const name = item.name[this.currentLang];
-      const itemPrice = this.calculatePrice(item.price);
-      if (!itemCounts[name]) {
-        itemCounts[name] = { count: 0, price: item.price };
-      }
-      itemCounts[name].count += 1;
-      total += itemPrice;
+      const qty = parseInt(item.quantity) || 1;
+      const unitPrice = this.calculatePrice(item.price);
+      const itemTotal = unitPrice * qty;
+      
+      message += `- ${name} x${qty} ($${itemTotal.toFixed(2)})\n`;
+      total += itemTotal;
     });
-
-    Object.keys(itemCounts).forEach(name => {
-      const data = itemCounts[name];
-      const itemPrice = this.calculatePrice(data.price);
-      const itemTotal = data.count * itemPrice;
-      message += `- ${name} x${data.count} ($${itemTotal.toFixed(2)})\n`;
-    });
-    
     message += `\n*TOTAL: $${total.toFixed(2)}*`;
-
     if (this.config.bcvRate) {
       const totalBs = total * this.config.bcvRate;
       message += `\n*TOTAL (VES): Bs. ${totalBs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}*`;
     }
-    
     const whatsappUrl = `https://wa.me/${this.config.brand.whatsapp}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   }
@@ -661,14 +669,11 @@ class BakeryApp {
     const progress = document.getElementById('scrollProgress');
     const backToTop = document.getElementById('backToTop');
     const cartToggle = document.getElementById('cartToggle');
-
     window.addEventListener('scroll', () => {
       const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
       const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrolled = (winScroll / height) * 100;
-
       if (progress) progress.style.width = scrolled + "%";
-      
       if (backToTop) {
         if (winScroll > 300) {
           backToTop.classList.add('active');
@@ -676,7 +681,6 @@ class BakeryApp {
           backToTop.classList.remove('active');
         }
       }
-
       if (cartToggle) {
         if (winScroll > 200 && this.cart.length > 0) {
           cartToggle.classList.add('sticky');

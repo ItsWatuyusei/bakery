@@ -1,28 +1,45 @@
-const CACHE_NAME = 'bakery-cache-v1';
+const CACHE_NAME = 'bakery-cache-v1.0.1';
 const urlsToCache = [
   './',
   './index.html',
-  './assets/css/styles.css',
-  './assets/js/app.js',
-  './assets/js/config.js',
-  './artisan_bread_savory_1777561153256.png',
-  './bakery_background_texture_1777567586978.png',
-  './chocolate_cake_sweet_1777561087967.png',
-  './croissant_savory_1777560964071.png',
-  './strawberry_tart_sweet_1777561230311.png',
+  './assets/css/styles.css?v=1.0.1',
+  './assets/js/app.js?v=1.0.1',
+  './assets/js/config.js?v=1.0.1',
   './manifest.json'
 ];
 
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
   );
 });
 
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.match(event.request).then(response => {
+        const fetchPromise = fetch(event.request).then(networkResponse => {
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        });
+        return response || fetchPromise;
+      });
+    })
   );
 });
