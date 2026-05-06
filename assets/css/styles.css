@@ -1181,8 +1181,14 @@ footer a:hover {
   .product-card { border-radius: 12px; }
   .product-info { padding: 1.5rem; }
   .product-name { font-size: 1.25rem; }
-  .modal-content { border-radius: 16px; }
-  .modal-details { padding: 1.5rem; }
+  .modal { padding: 0.5rem; align-items: center; }
+  .modal-content { 
+    max-height: 90vh; 
+    overflow-y: auto; 
+    border-radius: 20px; 
+  }
+  .modal-details { padding: 1.25rem; }
+  .close-modal { top: 0.75rem; right: 0.75rem; width: 34px; height: 34px; font-size: 1.2rem; }
 }
 
 @media (hover: none) {
