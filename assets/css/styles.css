@@ -222,20 +222,19 @@ h1 {
 
 .autocomplete-results {
   position: absolute;
-  top: 100%;
+  top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: var(--card-bg);
+  background: var(--background, #1a1a2e);
   border: 1px solid var(--border);
   border-radius: 12px;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   max-height: 350px;
   overflow-y: auto;
-  z-index: 1000;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
   display: none;
-  backdrop-filter: blur(15px);
-  animation: slideDown 0.3s ease-out;
+  animation: slideDown 0.2s ease-out;
 }
 
 @keyframes slideDown {
@@ -312,6 +311,7 @@ h1 {
   gap: 0.75rem;
   margin-top: 1.5rem;
   flex-wrap: wrap;
+  transition: opacity 0.3s ease;
 }
 
 .filter-btn {

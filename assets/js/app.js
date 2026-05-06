@@ -264,8 +264,7 @@ class BakeryApp {
 
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.search-container')) {
-        const results = document.getElementById('autocompleteResults');
-        if (results) results.style.display = 'none';
+        this.closeAutocomplete();
       }
     });
     filterBtns.forEach(btn => {
@@ -721,27 +720,30 @@ class BakeryApp {
     document.addEventListener('keydown', e => {
       if (e.keyCode === 123) e.preventDefault();
     });
+  }
+
   handleAutocomplete(query) {
     const resultsContainer = document.getElementById('autocompleteResults');
+    const filters = document.querySelector('.filters');
     if (!resultsContainer) return;
 
     if (!query || query.length < 2) {
-      resultsContainer.style.display = 'none';
+      this.closeAutocomplete();
       return;
     }
 
-    const matches = this.config.products.filter(p => 
+    const matches = this.config.products.filter(p =>
       p.name[this.currentLang].toLowerCase().includes(query.toLowerCase())
     ).slice(0, 5);
 
     if (matches.length === 0) {
-      resultsContainer.style.display = 'none';
+      this.closeAutocomplete();
       return;
     }
 
     resultsContainer.innerHTML = matches.map(p => `
       <div class="autocomplete-item" data-id="${p.id}">
-        <img src="${p.image}" class="autocomplete-thumb" alt="${p.name[this.currentLang]}">
+        <img src="${this.getImagePath(Array.isArray(p.image) ? p.image[0] : p.image)}" class="autocomplete-thumb" alt="${p.name[this.currentLang]}">
         <div class="autocomplete-info">
           <span class="autocomplete-name">${p.name[this.currentLang]}</span>
           <span class="autocomplete-price">$${p.price.toFixed(2)}</span>
@@ -750,6 +752,10 @@ class BakeryApp {
     `).join('');
 
     resultsContainer.style.display = 'block';
+    if (filters) {
+      filters.style.opacity = '0';
+      filters.style.pointerEvents = 'none';
+    }
 
     resultsContainer.querySelectorAll('.autocomplete-item').forEach(item => {
       item.addEventListener('click', () => {
@@ -759,10 +765,20 @@ class BakeryApp {
           searchInput.value = product.name[this.currentLang];
           this.searchQuery = searchInput.value;
           this.renderProducts();
-          resultsContainer.style.display = 'none';
+          this.closeAutocomplete();
         }
       });
     });
+  }
+
+  closeAutocomplete() {
+    const resultsContainer = document.getElementById('autocompleteResults');
+    const filters = document.querySelector('.filters');
+    if (resultsContainer) resultsContainer.style.display = 'none';
+    if (filters) {
+      filters.style.opacity = '1';
+      filters.style.pointerEvents = '';
+    }
   }
 }
 
