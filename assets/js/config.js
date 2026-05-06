@@ -1,6 +1,11 @@
 const CONFIG = {
   settings: {
     profitMargin: 60,
+    bulkDiscount: {
+      enabled: true,
+      minItems: 5,
+      percentage: 5
+    }
   },
   brand: {
     name: {
@@ -33,6 +38,7 @@ const CONFIG = {
       back: 'Back to catalog',
       orderMessage: 'Hello! I am interested in ordering: ',
       promos: [
+        'Get 5% OFF on orders of 5 items or more!',
         'Free delivery on orders over $10!',
         'Baked with passion every morning at 6:00 AM',
         'Authentic Venezuelan flavors in every bite',
@@ -48,7 +54,8 @@ const CONFIG = {
       sendOrder: 'Send Order to WhatsApp',
       checkoutMessage: 'Hello! I would like to place the following order:',
       clearCart: 'Clear Cart',
-      alreadyInCart: 'in your order'
+      alreadyInCart: 'in your order',
+      discountApplied: 'Bulk Discount Applied!'
     },
     es: {
       searchPlaceholder: 'Buscar productos...',
@@ -65,6 +72,7 @@ const CONFIG = {
       back: 'Volver al catálogo',
       orderMessage: '¡Hola! Me gustaría pedir: ',
       promos: [
+        '¡Lleva 5 o más artículos y obtén un 5% de descuento!',
         '¡Envío gratis en pedidos superiores a $10!',
         'Horneado con pasión cada mañana a las 6:00 AM',
         'Auténtico sabor venezolano en cada bocado',
@@ -74,13 +82,15 @@ const CONFIG = {
       cartTitle: 'Mi Pedido',
       total: 'Total (USD)',
       totalBcv: 'Total (VES)',
+      totalOriginal: 'Subtotal',
       bcvLabel: 'Tasa Bs.',
       bcvUnavailable: 'Tasa Bs. no disponible',
       emptyCart: 'Tu pedido está vacío',
       sendOrder: 'Enviar pedido por WhatsApp',
       checkoutMessage: '¡Hola! Me gustaría realizar el siguiente pedido:',
       clearCart: 'Limpiar Carrito',
-      alreadyInCart: 'en el pedido'
+      alreadyInCart: 'en el pedido',
+      discountApplied: '¡Descuento por volumen aplicado!'
     },
     pt: {
       searchPlaceholder: 'Buscar produtos...',
@@ -97,6 +107,7 @@ const CONFIG = {
       back: 'Voltar ao catálogo',
       orderMessage: 'Olá! Gostaria de pedir: ',
       promos: [
+        'Leve 5 ou mais itens e ganhe 5% de desconto!',
         'Frete grátis em pedidos acima de $10!',
         'Assado com paixão todas as manhãs às 6h',
         'Autêntico sabor venezuelano em cada mordida',
@@ -112,7 +123,8 @@ const CONFIG = {
       sendOrder: 'Enviar pedido por WhatsApp',
       checkoutMessage: 'Olá! Gostaria de fazer o seguinte pedido:',
       clearCart: 'Limpar Carrinho',
-      alreadyInCart: 'no pedido'
+      alreadyInCart: 'no pedido',
+      discountApplied: 'Desconto por volume aplicado!'
     }
   },
   products: [

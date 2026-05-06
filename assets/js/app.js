@@ -183,8 +183,36 @@ class BakeryApp {
     if (totalBcvLabel) totalBcvLabel.textContent = t.totalBcv;
     if (checkoutBtn) checkoutBtn.textContent = t.sendOrder;
     if (clearCartBtn) clearCartBtn.textContent = t.clearCart;
+    
+    const discountLabel = document.getElementById('discountLabel');
+    if (discountLabel) discountLabel.textContent = t.discountApplied;
 
     this.updateLangSwitcher();
+  }
+
+  calculateCartTotal() {
+    let subtotal = 0;
+    let totalItems = 0;
+    
+    this.cart.forEach(item => {
+      const qty = parseInt(item.quantity) || 1;
+      const unitPrice = this.calculatePrice(item.price);
+      subtotal += unitPrice * qty;
+      totalItems += qty;
+    });
+
+    let discount = 0;
+    const ds = this.config.settings.bulkDiscount;
+    if (ds && ds.enabled && totalItems >= ds.minItems) {
+      discount = subtotal * (ds.percentage / 100);
+    }
+
+    return {
+      subtotal,
+      discount,
+      total: subtotal - discount,
+      totalItems
+    };
   }
 
   renderProducts() {
@@ -624,12 +652,12 @@ class BakeryApp {
     if (checkoutBtn) checkoutBtn.disabled = false;
     if (clearCartBtn) clearCartBtn.disabled = false;
     
-    let total = 0;
+    const totals = this.calculateCartTotal();
+    
     container.innerHTML = this.cart.map((item, index) => {
       const qty = parseInt(item.quantity) || 1;
       const unitPrice = this.calculatePrice(item.price);
       const itemTotal = unitPrice * qty;
-      total += itemTotal;
       
       return `
         <div class="cart-item">
@@ -648,9 +676,22 @@ class BakeryApp {
       `;
     }).join('');
     
-    totalEl.textContent = `$${total.toFixed(2)}`;
+    const discountRow = document.getElementById('discountRow');
+    const discountEl = document.getElementById('cartDiscount');
+    const totalLabel = document.getElementById('totalLabel');
+
+    if (totals.discount > 0) {
+      if (discountRow) discountRow.style.display = 'flex';
+      if (discountEl) discountEl.textContent = `-$${totals.discount.toFixed(2)}`;
+      if (totalLabel) totalLabel.textContent = `${t.total} (${this.config.settings.bulkDiscount.percentage}%)`;
+    } else {
+      if (discountRow) discountRow.style.display = 'none';
+      if (totalLabel) totalLabel.textContent = t.total;
+    }
+
+    totalEl.textContent = `$${totals.total.toFixed(2)}`;
     if (this.config.bcvRate) {
-      const totalBs = total * this.config.bcvRate;
+      const totalBs = totals.total * this.config.bcvRate;
       if (totalBcvEl) totalBcvEl.textContent = `Bs. ${totalBs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     } else {
       if (totalBcvEl) totalBcvEl.textContent = `Bs. —`;
@@ -659,20 +700,24 @@ class BakeryApp {
 
   checkout() {
     const t = this.config.i18n[this.currentLang];
-    let total = 0;
+    const totals = this.calculateCartTotal();
     let message = `${t.checkoutMessage}\n\n`;
     this.cart.forEach(item => {
       const name = item.name[this.currentLang];
       const qty = parseInt(item.quantity) || 1;
       const unitPrice = this.calculatePrice(item.price);
       const itemTotal = unitPrice * qty;
-      
       message += `- ${name} x${qty} ($${itemTotal.toFixed(2)})\n`;
-      total += itemTotal;
     });
-    message += `\n*TOTAL: $${total.toFixed(2)}*`;
+
+    if (totals.discount > 0) {
+      message += `\nSubtotal: $${totals.subtotal.toFixed(2)}`;
+      message += `\n${t.discountApplied} (${this.config.settings.bulkDiscount.percentage}%): -$${totals.discount.toFixed(2)}`;
+    }
+
+    message += `\n\n*TOTAL: $${totals.total.toFixed(2)}*`;
     if (this.config.bcvRate) {
-      const totalBs = total * this.config.bcvRate;
+      const totalBs = totals.total * this.config.bcvRate;
       message += `\n*TOTAL (VES): Bs. ${totalBs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}*`;
     }
     const whatsappUrl = `https://wa.me/${this.config.brand.whatsapp}?text=${encodeURIComponent(message)}`;
