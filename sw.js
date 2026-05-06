@@ -43,7 +43,7 @@ self.addEventListener('fetch', event => {
 
       return fetch(request)
         .then(response => {
-          // Cache successful same-origin responses
+
           if (response.ok && url.origin === self.location.origin) {
             const cacheName = request.destination === 'image' ? CACHE_IMAGES : CACHE_STATIC;
             caches.open(cacheName).then(cache => cache.put(request, response.clone()));
@@ -51,11 +51,11 @@ self.addEventListener('fetch', event => {
           return response;
         })
         .catch(() => {
-          // Fallback for document navigation
+
           if (request.destination === 'document') {
             return caches.match('./offline.html');
           }
-          // Default error response for other assets
+
           return new Response(null, { status: 408 });
         });
     })

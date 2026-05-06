@@ -441,8 +441,6 @@ class BakeryApp {
     }
     const buyBtn = document.getElementById('buyButton');
     if (buyBtn) {
-      const message = encodeURIComponent(`${t.orderMessage}${p.name[this.currentLang]}`);
-      buyBtn.href = `https://wa.me/${this.config.brand.whatsapp}?text=${message}`;
       buyBtn.textContent = t.buy;
     }
     modal.classList.add('active');
@@ -479,9 +477,33 @@ class BakeryApp {
 
     const buyBtn = document.getElementById('buyButton');
     if (buyBtn && p && t) {
-      const qtyStr = this.modalQty > 1 ? ` (x${this.modalQty})` : '';
-      const message = encodeURIComponent(`${t.orderMessage}${p.name[this.currentLang]}${qtyStr}`);
-      buyBtn.href = `https://wa.me/${this.config.brand.whatsapp}?text=${message}`;
+      const unitPrice = this.calculatePrice(p.price);
+      const subtotal = unitPrice * this.modalQty;
+      
+      let discount = 0;
+      const ds = this.config.settings.bulkDiscount;
+      if (ds && ds.enabled && this.modalQty >= ds.minItems) {
+        discount = subtotal * (ds.percentage / 100);
+      }
+      
+      const totalPrice = subtotal - discount;
+      
+      let message = `${t.checkoutMessage}\n\n`;
+      message += `- ${p.name[this.currentLang]} x${this.modalQty} ($${subtotal.toFixed(2)})\n`;
+      
+      if (discount > 0) {
+        message += `\nSubtotal: $${subtotal.toFixed(2)}`;
+        message += `\n${t.discountApplied} (${ds.percentage}%): -$${discount.toFixed(2)}`;
+      }
+      
+      message += `\n\n*TOTAL: $${totalPrice.toFixed(2)}*`;
+      
+      if (this.config.bcvRate) {
+        const totalBs = totalPrice * this.config.bcvRate;
+        message += `\n*TOTAL (VES): Bs. ${totalBs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}*`;
+      }
+      
+      buyBtn.href = `https://wa.me/${this.config.brand.whatsapp}?text=${encodeURIComponent(message)}`;
     }
   }
 
