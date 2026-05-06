@@ -137,16 +137,16 @@ class BakeryApp {
     if (metaDesc) {
       const descriptions = {
         en: 'Explore our delicious artisan bakery products. Sweet and savory delights made fresh daily.',
-        es: 'Explora nuestros deliciosos productos de panadería artesanal. Dulces y salados hechos frescos cada día.'
+        es: 'Explora nuestros deliciosos productos de panadería artesanal. Dulces y salados hechos frescos cada día.',
+        pt: 'Explore os nossos deliciosos produtos de padaria artesanal. Doces e salgados feitos frescos todos os dias.'
       };
-      metaDesc.content = descriptions[this.currentLang];
+      metaDesc.content = descriptions[this.currentLang] || descriptions.en;
     }
+
+    document.documentElement.lang = this.currentLang;
 
     const h1 = document.querySelector('header h1');
     if (h1) h1.textContent = this.config.brand.name[this.currentLang];
-
-    const productCounter = document.getElementById('productCounter');
-    if (productCounter) productCounter.textContent = this.config.products.length;
 
     const searchInput = document.getElementById('searchInput');
     const filterAll = document.getElementById('filterAll');
@@ -734,7 +734,7 @@ class BakeryApp {
 
     const matches = this.config.products.filter(p =>
       p.name[this.currentLang].toLowerCase().includes(query.toLowerCase())
-    ).slice(0, 5);
+    ).slice(0, 8);
 
     if (matches.length === 0) {
       this.closeAutocomplete();

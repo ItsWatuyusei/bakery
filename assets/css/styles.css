@@ -82,7 +82,7 @@ header {
   padding: 4rem 2rem 6rem;
   text-align: center;
   position: relative;
-  overflow: hidden;
+  z-index: 10;
   background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJtfRYZAGTvDeMj6w45Wjai2HxKQhbssVqwg&s');
   background-size: cover;
   background-position: center;
@@ -229,7 +229,7 @@ h1 {
   border: 1px solid var(--border);
   border-radius: 12px;
   margin-top: 0.25rem;
-  max-height: 350px;
+  max-height: 288px;
   overflow-y: auto;
   z-index: 9999;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
