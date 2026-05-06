@@ -37,34 +37,27 @@ self.addEventListener('fetch', event => {
 
   if (request.method !== 'GET') return;
 
-  if (request.destination === 'image') {
-    event.respondWith(
-      caches.open(CACHE_IMAGES).then(cache =>
-        cache.match(request).then(cached => {
-          if (cached) return cached;
-          return fetch(request).then(response => {
-            if (response.ok) cache.put(request, response.clone());
-            return response;
-          }).catch(() => new Response('', { status: 408 }));
-        })
-      )
-    );
-    return;
-  }
-
   event.respondWith(
-    caches.open(CACHE_STATIC).then(cache =>
-      cache.match(request).then(cached => {
-        const networkFetch = fetch(request).then(response => {
-          if (response.ok) cache.put(request, response.clone());
+    caches.match(request).then(cached => {
+      if (cached) return cached;
+
+      return fetch(request)
+        .then(response => {
+          // Cache successful same-origin responses
+          if (response.ok && url.origin === self.location.origin) {
+            const cacheName = request.destination === 'image' ? CACHE_IMAGES : CACHE_STATIC;
+            caches.open(cacheName).then(cache => cache.put(request, response.clone()));
+          }
           return response;
-        }).catch(() => {
+        })
+        .catch(() => {
+          // Fallback for document navigation
           if (request.destination === 'document') {
             return caches.match('./offline.html');
           }
+          // Default error response for other assets
+          return new Response(null, { status: 408 });
         });
-        return cached || networkFetch;
-      })
-    )
+    })
   );
 });
