@@ -722,6 +722,9 @@ class BakeryApp {
     }
     const whatsappUrl = `https://wa.me/${this.config.brand.whatsapp}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+
+    this.clearCart();
+    this.toggleCart(false);
   }
 
   setupScrollEffects() {
