@@ -118,6 +118,11 @@
     window.addEventListener('online', () => {
       window.location.href = './index.html';
     });
+
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (e.keyCode === 123) e.preventDefault();
+    });
   </script>
 </body>
 </html>
