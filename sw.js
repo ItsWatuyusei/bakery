@@ -1,45 +1,70 @@
-const CACHE_NAME = 'bakery-cache-v1.0.1';
-const urlsToCache = [
+const CACHE_VERSION = 'v2.0.0';
+const CACHE_STATIC = `bakery-static-${CACHE_VERSION}`;
+const CACHE_IMAGES = `bakery-images-${CACHE_VERSION}`;
+
+const STATIC_ASSETS = [
   './',
   './index.html',
-  './assets/css/styles.css?v=1.0.1',
-  './assets/js/app.js?v=1.0.1',
-  './assets/js/config.js?v=1.0.1',
-  './manifest.json'
+  './offline.html',
+  './manifest.json',
+  './assets/css/styles.css',
+  './assets/js/app.js',
+  './assets/js/config.js'
 ];
 
 self.addEventListener('install', event => {
   self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_STATIC).then(cache => cache.addAll(STATIC_ASSETS))
   );
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    }).then(() => self.clients.claim())
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_STATIC && key !== CACHE_IMAGES)
+          .map(key => caches.delete(key))
+      )
+    ).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', event => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  if (request.method !== 'GET') return;
+
+  if (request.destination === 'image') {
+    event.respondWith(
+      caches.open(CACHE_IMAGES).then(cache =>
+        cache.match(request).then(cached => {
+          if (cached) return cached;
+          return fetch(request).then(response => {
+            if (response.ok) cache.put(request, response.clone());
+            return response;
+          }).catch(() => new Response('', { status: 408 }));
+        })
+      )
+    );
+    return;
+  }
+
   event.respondWith(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.match(event.request).then(response => {
-        const fetchPromise = fetch(event.request).then(networkResponse => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
+    caches.open(CACHE_STATIC).then(cache =>
+      cache.match(request).then(cached => {
+        const networkFetch = fetch(request).then(response => {
+          if (response.ok) cache.put(request, response.clone());
+          return response;
+        }).catch(() => {
+          if (request.destination === 'document') {
+            return caches.match('./offline.html');
+          }
         });
-        return response || fetchPromise;
-      });
-    })
+        return cached || networkFetch;
+      })
+    )
   );
 });

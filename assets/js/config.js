@@ -120,7 +120,7 @@ const CONFIG = {
       id: 'prod_01',
       name: { en: 'Catalinas', es: 'Catalinas', pt: 'Catalinas' },
       category: 'sweet',
-      price: 1.2,
+      price: 1.22,
       badge: 'bestseller',
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/catalinas00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/catalinas01.webp'],
       description: {
@@ -133,7 +133,7 @@ const CONFIG = {
       id: 'prod_02',
       name: { en: 'Polvorosas', es: 'Polvorosas', pt: 'Polvorosas' },
       category: 'sweet',
-      price: 1.2,
+      price: 1.22,
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj3rdUKWy9pyKhSWyqfRwXB_mLb_XQ0wrl4w&s',
       description: {
         en: 'Artisan cookies of colonial heritage that melt in your mouth. Prepared with toasted flour and butter, lightly dusted with fine sugar.',
@@ -145,7 +145,7 @@ const CONFIG = {
       id: 'prod_03',
       name: { en: 'Colombianito', es: 'Colombianito', pt: 'Colombianito' },
       category: 'sweet',
-      price: 1.1,
+      price: 1.22,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/colombianito00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/colombianito0.webp'],
       description: {
         en: 'A Venezuelan afternoon classic: sweet, soft bread rolls covered with a crunchy sugar coating that delights in every bite.',
@@ -157,7 +157,7 @@ const CONFIG = {
       id: 'prod_04',
       name: { en: 'Guava Bread', es: 'Pan de Guayaba', pt: 'Pão de Goiaba' },
       category: 'sweet',
-      price: 1.2,
+      price: 1.22,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panArequipe00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panArequipe01.webp'],
       description: {
         en: 'Artisan sweet bread with tender dough, generously filled with a dense and aromatic natural guava jam.',
@@ -169,7 +169,7 @@ const CONFIG = {
       id: 'prod_05',
       name: { en: 'Arequipe Bread', es: 'Pan de Arequipe', pt: 'Pão de Doce de Leite' },
       category: 'sweet',
-      price: 1.2,
+      price: 1.22,
       badge: 'new',
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panArequipe00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panArequipe01.webp'],
       description: {
@@ -182,7 +182,7 @@ const CONFIG = {
       id: 'prod_06',
       name: { en: 'Arequipe Pastry', es: 'Pastel de Arequipe', pt: 'Pastel de Doce de Leite' },
       category: 'sweet',
-      price: 1.5,
+      price: 1.84,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/pastelArequipe00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/pastelArequipe01.webp'],
       description: {
         en: 'Crunchy and golden puff pastry, crafted with fine layers that enclose a premium caramel filling. Ideal for a special craving.',
@@ -194,7 +194,7 @@ const CONFIG = {
       id: 'prod_07',
       name: { en: 'Guava Pastry', es: 'Pastel de Guayaba', pt: 'Pastel de Goiaba' },
       category: 'sweet',
-      price: 1.5,
+      price: 1.84,
       badge: 'bestseller',
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/pastelGuayaba00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/pastelGuayaba01.webp'],
       description: {
@@ -207,7 +207,7 @@ const CONFIG = {
       id: 'prod_08',
       name: { en: 'Cheese Bread', es: 'Pan de Queso', pt: 'Pão de Queijo' },
       category: 'savory',
-      price: 1.5,
+      price: 1.84,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panQueso00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panQueso01.webp'],
       description: {
         en: "Savory bread with soft dough, enriched with plenty of grated white 'llanero' cheese, both inside and on its golden crust.",
@@ -219,7 +219,7 @@ const CONFIG = {
       id: 'prod_09',
       name: { en: 'Quesadilla', es: 'Quesadilla', pt: 'Quesadilla' },
       category: 'sweet',
-      price: 1.5,
+      price: 1.84,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/quesadilla00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/quesadilla01.webp'],
       description: {
         en: 'Traditional star-shaped delight, filled with a smooth sweet cheese cream and spices. A treasure of national bakery.',
@@ -231,7 +231,7 @@ const CONFIG = {
       id: 'prod_10',
       name: { en: 'Cortadito', es: 'Cortadito', pt: 'Cortadinho' },
       category: 'sweet',
-      price: 1.5,
+      price: 1.84,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/cortadito00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/cortadito01.webp'],
       description: {
         en: 'Dense and spiced cake squares, flavored with raw cane sugar and ginger. The quintessential traditional snack.',
@@ -243,7 +243,7 @@ const CONFIG = {
       id: 'prod_11',
       name: { en: 'French Bread', es: 'Pan Francés', pt: 'Pão Francês' },
       category: 'savory',
-      price: 1.1,
+      price: 1.22,
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panSalado00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panSalado01.webp'],
       description: {
         en: 'The daily bread in Venezuela: thin and crunchy crust with a very soft and airy crumb. Ideal when freshly baked.',
@@ -255,7 +255,7 @@ const CONFIG = {
       id: 'prod_12',
       name: { en: 'Canilla Bread', es: 'Pan Canilla', pt: 'Pão Canilha' },
       category: 'savory',
-      price: 1.2,
+      price: 1.22,
       badge: 'new',
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panSalado00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/panSalado01.webp'],
       description: {
@@ -268,7 +268,7 @@ const CONFIG = {
       id: 'prod_13',
       name: { en: 'Golfiado', es: 'Golfiado', pt: 'Golfiado' },
       category: 'sweet',
-      price: 1.5,
+      price: 1.84,
       badge: 'limited',
       image: ['https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/golfiado00.webp', 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/golfiado01.webp'],
       description: {
@@ -281,7 +281,7 @@ const CONFIG = {
       id: 'prod_14',
       name: { en: 'Coconut Cookies', es: 'Galletas de Coco', pt: 'Biscoitos de Coco' },
       category: 'sweet',
-      price: 1.2,
+      price: 1.22,
       image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDF7fSTw92GVAq7sECTcDgRUB7tGF8ofY6fg&s'],
       description: {
         en: 'Rustic and crunchy cookies prepared with natural grated coconut. A little piece of the Caribbean in every bite.',
@@ -293,7 +293,7 @@ const CONFIG = {
       id: 'prod_15',
       name: { en: 'Milk Bread', es: 'Pan de Leche', pt: 'Pão de Leite' },
       category: 'sweet',
-      price: 1.1,
+      price: 1.22,
       image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4u68A4SPTPrxPPJNy7pSTYmEq8YAW8wZySA&s'],
       description: {
         en: 'Extremely soft rolls, made with fresh milk and butter. Their cloud-like texture makes them irresistible.',
@@ -305,7 +305,7 @@ const CONFIG = {
       id: 'prod_16',
       name: { en: 'Pinita Bread', es: 'Pan Piñita', pt: 'Pão Pinha' },
       category: 'sweet',
-      price: 1.1,
+      price: 1.22,
       image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSD4DajMk5cOEANh23U9mkuB3QtR7hKMzMI3A&s'],
       description: {
         en: 'Traditional sweet bread topped with granulated sugar. Its vanilla aroma and spongy texture evoke the best memories.',
@@ -317,7 +317,7 @@ const CONFIG = {
       id: 'prod_17',
       name: { en: 'Pecho de Niña', es: 'Pecho de Niña', pt: 'Peito de Menina' },
       category: 'sweet',
-      price: 1.1,
+      price: 1.22,
       image: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTeIs6NsclrbHEMZ6ZF3FJ_q9K_dt6bGTP8qw&s'],
       description: {
         en: 'Extra tender and delicate sweet bread, with a subtle aroma that captivates. A soft and comforting classic.',

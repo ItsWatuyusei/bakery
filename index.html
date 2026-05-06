@@ -9,9 +9,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="https://itswatuyusei.github.io/favicon.ico">
-  <link rel="apple-touch-icon" href="https://itswatuyusei.github.io/favicon.ico">
+  <link rel="apple-touch-icon" href="https://github.com/itswatuyusei.png?size=192">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bakery">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#ff6a00">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://ve.dolarapi.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://ve.dolarapi.com https://github.com;">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
@@ -47,7 +51,9 @@
       </div>
       <h1>ItsWatuyusei Bakery</h1>
       <div class="search-container">
-        <input type="text" id="searchInput">
+        <input type="text" id="searchInput" autocomplete="off">
+        <span id="productCounter" class="search-count"></span>
+        <div id="autocompleteResults" class="autocomplete-results"></div>
       </div>
       <div class="filters">
         <button class="filter-btn active" id="filterAll" data-category="all"></button>

@@ -145,6 +145,9 @@ class BakeryApp {
     const h1 = document.querySelector('header h1');
     if (h1) h1.textContent = this.config.brand.name[this.currentLang];
 
+    const productCounter = document.getElementById('productCounter');
+    if (productCounter) productCounter.textContent = this.config.products.length;
+
     const searchInput = document.getElementById('searchInput');
     const filterAll = document.getElementById('filterAll');
     const filterSweet = document.getElementById('filterSweet');
@@ -192,6 +195,10 @@ class BakeryApp {
       const matchesSearch = p.name[this.currentLang].toLowerCase().includes(this.searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
+
+    const counter = document.getElementById('productCounter');
+    if (counter) counter.textContent = filtered.length;
+
     const totalPages = Math.ceil(filtered.length / this.itemsPerPage);
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
@@ -251,8 +258,16 @@ class BakeryApp {
         this.searchQuery = e.target.value;
         this.currentPage = 1;
         this.renderProducts();
+        this.handleAutocomplete(e.target.value);
       });
     }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-container')) {
+        const results = document.getElementById('autocompleteResults');
+        if (results) results.style.display = 'none';
+      }
+    });
     filterBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         filterBtns.forEach(b => b.classList.remove('active'));
@@ -705,6 +720,48 @@ class BakeryApp {
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => {
       if (e.keyCode === 123) e.preventDefault();
+    });
+  handleAutocomplete(query) {
+    const resultsContainer = document.getElementById('autocompleteResults');
+    if (!resultsContainer) return;
+
+    if (!query || query.length < 2) {
+      resultsContainer.style.display = 'none';
+      return;
+    }
+
+    const matches = this.config.products.filter(p => 
+      p.name[this.currentLang].toLowerCase().includes(query.toLowerCase())
+    ).slice(0, 5);
+
+    if (matches.length === 0) {
+      resultsContainer.style.display = 'none';
+      return;
+    }
+
+    resultsContainer.innerHTML = matches.map(p => `
+      <div class="autocomplete-item" data-id="${p.id}">
+        <img src="${p.image}" class="autocomplete-thumb" alt="${p.name[this.currentLang]}">
+        <div class="autocomplete-info">
+          <span class="autocomplete-name">${p.name[this.currentLang]}</span>
+          <span class="autocomplete-price">$${p.price.toFixed(2)}</span>
+        </div>
+      </div>
+    `).join('');
+
+    resultsContainer.style.display = 'block';
+
+    resultsContainer.querySelectorAll('.autocomplete-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const product = this.config.products.find(p => p.id == item.dataset.id);
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput && product) {
+          searchInput.value = product.name[this.currentLang];
+          this.searchQuery = searchInput.value;
+          this.renderProducts();
+          resultsContainer.style.display = 'none';
+        }
+      });
     });
   }
 }
