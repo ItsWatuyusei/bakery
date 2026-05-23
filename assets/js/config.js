@@ -55,7 +55,9 @@ const CONFIG = {
       checkoutMessage: 'Hello! I would like to place the following order:',
       clearCart: 'Clear Cart',
       alreadyInCart: 'in your order',
-      discountApplied: 'Bulk Discount Applied!'
+      discountApplied: 'Bulk Discount Applied!',
+      from: 'From',
+      sizeLabel: 'Bag Size'
     },
     es: {
       searchPlaceholder: 'Buscar productos...',
@@ -90,7 +92,9 @@ const CONFIG = {
       checkoutMessage: '¡Hola! Me gustaría realizar el siguiente pedido:',
       clearCart: 'Limpiar Carrito',
       alreadyInCart: 'en el pedido',
-      discountApplied: '¡Descuento por volumen aplicado!'
+      discountApplied: '¡Descuento por volumen aplicado!',
+      from: 'Desde',
+      sizeLabel: 'Tamaño de bolsa'
     },
     pt: {
       searchPlaceholder: 'Buscar produtos...',
@@ -124,7 +128,9 @@ const CONFIG = {
       checkoutMessage: 'Olá! Gostaria de fazer o seguinte pedido:',
       clearCart: 'Limpar Carrinho',
       alreadyInCart: 'no pedido',
-      discountApplied: 'Desconto por volume aplicado!'
+      discountApplied: 'Desconto por volume aplicado!',
+      from: 'A partir de',
+      sizeLabel: 'Tamanho do saco'
     }
   },
   products: [
@@ -347,6 +353,78 @@ const CONFIG = {
         en: 'A larger version of our classic guava bread, with even more filling and a perfect golden crust.',
         es: 'Una versión más grande de nuestro clásico pan de guayaba, con mucho más relleno y una corteza dorada perfecta.',
         pt: 'Uma versão maior do nosso clássico pão de goiaba, com ainda mais recheio e uma crosta dourada perfecta.'
+      }
+    },
+    {
+      id: 'prod_19',
+      name: { en: 'Candied Peanuts', es: 'Maní Garrapiñado', pt: 'Amendoim Caramelizado' },
+      category: 'sweet',
+      price: 0.40,
+      badge: 'new',
+      image: 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/maniGarrapinado.webp',
+      description: {
+        en: 'Delicious artisan candied peanuts, crispy, sweet, and freshly caramelized. Perfect as a sweet snack.',
+        es: 'Delicioso maní garrapiñado tradicional artesanal, crujiente, dulce y recién caramelizado. Perfecto como merienda dulce.',
+        pt: 'Delicioso amendoim caramelizado artesanal tradicional, crocante, doce e recém-caramelizado. Perfeito como um lanche doce.'
+      },
+      sizes: {
+        '100g': 0.5125,
+        '250g': 1.28125,
+        '500g': 2.5625
+      }
+    },
+    {
+      id: 'prod_20',
+      name: { en: 'Sesame Peanuts', es: 'Maní con Ajonjolí', pt: 'Amendoim com Gergelim' },
+      category: 'sweet',
+      price: 0.40,
+      badge: 'new',
+      image: 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/maniAjonjoli.webp',
+      description: {
+        en: 'Traditional artisan peanuts coated with crispy caramelized sesame seeds. A perfect combination of sweetness and crunch.',
+        es: 'Maní artesanal tradicional recubierto con crujientes semillas de ajonjolí caramelizadas. Una combinación perfecta de dulzura y textura.',
+        pt: 'Amendoim artesanal tradicional coberto com sementes de gergelim caramelizadas crocantes. Uma combinação perfeita de doçura e crocância.'
+      },
+      sizes: {
+        '100g': 0.5125,
+        '250g': 1.28125,
+        '500g': 2.5625
+      }
+    },
+    {
+      id: 'prod_21',
+      name: { en: 'Salted Peanuts', es: 'Maní Salado', pt: 'Amendoim Salgado' },
+      category: 'savory',
+      price: 0.40,
+      badge: 'new',
+      image: 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/maniSalado.webp',
+      description: {
+        en: 'Premium roasted peanuts lightly seasoned with fine sea salt. The classic, crisp savory snack.',
+        es: 'Maní tostado premium ligeramente sazonado con sal marina fina. El clásico snack salado y crujiente.',
+        pt: 'Amendoim torrado premium levemente temperado com sal marinho fino. O clássico lanche salgado e crocante.'
+      },
+      sizes: {
+        '100g': 0.5125,
+        '250g': 1.28125,
+        '500g': 2.5625
+      }
+    },
+    {
+      id: 'prod_22',
+      name: { en: 'Mixed Peanuts', es: 'Maní Mixto', pt: 'Amendoim Misto' },
+      category: 'savory',
+      price: 0.40,
+      badge: 'new',
+      image: 'https://ik.imagekit.io/ItsWatuyusei/Image/Bakery/maniMixto.webp',
+      description: {
+        en: 'A delicious mix of roasted peanuts with a variety of seasonings. The perfect crunchy snack for any occasion.',
+        es: 'Una deliciosa mezcla de maní tostado con una variedad de condimentos. El snack crujiente perfecto para cualquier ocasión.',
+        pt: 'Uma deliciosa mistura de amendoim torrado com uma variedade de temperos. O lanche crocante perfeito para qualquer ocasião.'
+      },
+      sizes: {
+        '100g': 0.5125,
+        '250g': 1.28125,
+        '500g': 2.5625
       }
     }
   ]

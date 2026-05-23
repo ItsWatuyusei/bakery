@@ -236,19 +236,27 @@ class BakeryApp {
       this.renderPagination(0);
       return;
     }
-    grid.innerHTML = paginatedItems.map((p, index) => `
-      <div class="product-card" style="animation-delay: ${index * 0.1}s" onclick="bakeryApp.openProduct('${p.id}')">
-        ${p.badge ? `<div class="product-badge ${p.badge}">${this.config.i18n[this.currentLang][p.badge]}</div>` : ''}
-        <div class="product-image-container">
-          <img src="${this.getImagePath(Array.isArray(p.image) ? p.image[0] : p.image)}" alt="${p.name[this.currentLang]}" class="product-image" loading="lazy">
+    grid.innerHTML = paginatedItems.map((p, index) => {
+      let priceHTML = `$${this.calculatePrice(p.price).toFixed(2)}`;
+      if (p.sizes) {
+        const minBasePrice = Math.min(...Object.values(p.sizes));
+        const fromLabel = this.config.i18n[this.currentLang].from || 'From';
+        priceHTML = `<span class="price-from">${fromLabel}</span> $${this.calculatePrice(minBasePrice).toFixed(2)}`;
+      }
+      return `
+        <div class="product-card" style="animation-delay: ${index * 0.1}s" onclick="bakeryApp.openProduct('${p.id}')">
+          ${p.badge ? `<div class="product-badge ${p.badge}">${this.config.i18n[this.currentLang][p.badge]}</div>` : ''}
+          <div class="product-image-container">
+            <img src="${this.getImagePath(Array.isArray(p.image) ? p.image[0] : p.image)}" alt="${p.name[this.currentLang]}" class="product-image" loading="lazy">
+          </div>
+          <div class="product-info">
+            <div class="product-category">${this.config.i18n[this.currentLang][p.category]}</div>
+            <h3 class="product-name">${p.name[this.currentLang]}</h3>
+            <div class="product-price">${priceHTML}</div>
+          </div>
         </div>
-        <div class="product-info">
-          <div class="product-category">${this.config.i18n[this.currentLang][p.category]}</div>
-          <h3 class="product-name">${p.name[this.currentLang]}</h3>
-          <div class="product-price">$${this.calculatePrice(p.price).toFixed(2)}</div>
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
     this.renderPagination(totalPages);
   }
 
@@ -429,7 +437,35 @@ class BakeryApp {
     }
     document.getElementById('modalName').textContent = p.name[this.currentLang];
     document.getElementById('modalDescription').textContent = p.description ? p.description[this.currentLang] : '';
-    document.getElementById('modalPrice').textContent = `$${this.calculatePrice(p.price).toFixed(2)}`;
+    
+    const sizeContainer = document.getElementById('modalSizeSelectorContainer');
+    const sizeOptions = document.getElementById('modalSizeOptions');
+    const sizeLabel = document.getElementById('sizeSelectorLabel');
+    
+    if (p.sizes) {
+      this.currentSize = Object.keys(p.sizes).find(size => size !== '100g') || Object.keys(p.sizes)[0];
+      if (sizeLabel) sizeLabel.textContent = t.sizeLabel || 'Bag Size:';
+      if (sizeOptions) {
+        sizeOptions.innerHTML = Object.keys(p.sizes).map(size => {
+          const isDisabled = size === '100g';
+          return `
+            <button class="size-option-btn ${size === this.currentSize ? 'active' : ''} ${isDisabled ? 'disabled' : ''}" 
+                    ${isDisabled ? 'disabled' : ''} 
+                    onclick="bakeryApp.selectSize('${size}', event)">
+              ${size}
+            </button>
+          `;
+        }).join('');
+      }
+      if (sizeContainer) sizeContainer.style.display = 'flex';
+      
+      const basePrice = p.sizes[this.currentSize];
+      document.getElementById('modalPrice').textContent = `$${this.calculatePrice(basePrice).toFixed(2)}`;
+    } else {
+      this.currentSize = null;
+      if (sizeContainer) sizeContainer.style.display = 'none';
+      document.getElementById('modalPrice').textContent = `$${this.calculatePrice(p.price).toFixed(2)}`;
+    }
     
     this.modalQty = 1;
     this.updateModalQtyUI();
@@ -446,6 +482,28 @@ class BakeryApp {
     modal.classList.add('active');
     document.body.style.overflow = 'hidden';
     this.playSound('pop');
+  }
+
+  selectSize(size, event) {
+    if (event) event.stopPropagation();
+    this.currentSize = size;
+    const buttons = document.querySelectorAll('.size-option-btn');
+    buttons.forEach(btn => {
+      const nameSpan = btn.querySelector('.size-name');
+      const btnSize = nameSpan ? nameSpan.textContent.trim() : btn.textContent.trim();
+      if (btnSize === size) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+    
+    const basePrice = this.currentProduct.sizes[size];
+    const finalPrice = this.calculatePrice(basePrice);
+    document.getElementById('modalPrice').textContent = `$${finalPrice.toFixed(2)}`;
+    
+    this.updateModalQtyUI();
+    this.playSound('tick');
   }
 
   updateModalQty(delta) {
@@ -466,7 +524,8 @@ class BakeryApp {
     const t = this.config.i18n[this.currentLang];
     
     if (statusEl && p && t) {
-      const inCart = this.cart.find(item => item.id === p.id);
+      const selectedSize = p.sizes ? this.currentSize : null;
+      const inCart = this.cart.find(item => item.id === p.id && item.selectedSize === selectedSize);
       if (inCart) {
         statusEl.textContent = `(${inCart.quantity} ${t.alreadyInCart})`;
         statusEl.style.display = 'inline-block';
@@ -477,7 +536,8 @@ class BakeryApp {
 
     const buyBtn = document.getElementById('buyButton');
     if (buyBtn && p && t) {
-      const unitPrice = this.calculatePrice(p.price);
+      const basePrice = p.sizes ? p.sizes[this.currentSize] : p.price;
+      const unitPrice = this.calculatePrice(basePrice);
       const subtotal = unitPrice * this.modalQty;
       
       let discount = 0;
@@ -489,7 +549,8 @@ class BakeryApp {
       const totalPrice = subtotal - discount;
       
       let message = `${t.checkoutMessage}\n\n`;
-      message += `- ${p.name[this.currentLang]} x${this.modalQty} ($${subtotal.toFixed(2)})\n`;
+      const displayName = p.name[this.currentLang] + (p.sizes ? ` (${this.currentSize})` : '');
+      message += `- ${displayName} x${this.modalQty} ($${subtotal.toFixed(2)})\n`;
       
       if (discount > 0) {
         message += `\nSubtotal: $${subtotal.toFixed(2)}`;
@@ -563,15 +624,18 @@ class BakeryApp {
       this.flyToCart(modalImg);
     }
 
-    const existingIndex = this.cart.findIndex(item => item.id === product.id);
+    const selectedSize = product.sizes ? this.currentSize : null;
+    const existingIndex = this.cart.findIndex(item => item.id === product.id && item.selectedSize === selectedSize);
+    
     if (existingIndex > -1) {
-      if (typeof this.cart[existingIndex].quantity === 'number') {
-        this.cart[existingIndex].quantity += qty;
-      } else {
-        this.cart[existingIndex].quantity = (this.cart[existingIndex].quantity || 1) + qty;
-      }
+      this.cart[existingIndex].quantity += qty;
     } else {
-      this.cart.push({ ...product, quantity: qty });
+      const cartItem = { ...product, quantity: qty };
+      if (selectedSize) {
+        cartItem.selectedSize = selectedSize;
+        cartItem.price = product.sizes[selectedSize];
+      }
+      this.cart.push(cartItem);
     }
 
     localStorage.setItem('bakery_cart', JSON.stringify(this.cart));
@@ -685,7 +749,11 @@ class BakeryApp {
         <div class="cart-item">
           <img src="${this.getImagePath(Array.isArray(item.image) ? item.image[0] : item.image)}" class="cart-item-img">
           <div class="cart-item-info">
-            <div class="cart-item-name">${item.name[this.currentLang]} <span class="cart-item-qty">x${qty}</span></div>
+            <div class="cart-item-name">
+              ${item.name[this.currentLang]}
+              ${item.selectedSize ? `<span class="cart-item-size" style="font-size:0.75rem;opacity:0.65;font-weight:500;margin-left:4px">(${item.selectedSize})</span>` : ''}
+              <span class="cart-item-qty">x${qty}</span>
+            </div>
             <div class="cart-item-price">$${unitPrice.toFixed(2)}</div>
             <div class="cart-item-subtotal">$${itemTotal.toFixed(2)}</div>
           </div>
@@ -725,7 +793,7 @@ class BakeryApp {
     const totals = this.calculateCartTotal();
     let message = `${t.checkoutMessage}\n\n`;
     this.cart.forEach(item => {
-      const name = item.name[this.currentLang];
+      const name = item.name[this.currentLang] + (item.selectedSize ? ` (${item.selectedSize})` : '');
       const qty = parseInt(item.quantity) || 1;
       const unitPrice = this.calculatePrice(item.price);
       const itemTotal = unitPrice * qty;

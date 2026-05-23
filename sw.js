@@ -1,63 +1,17 @@
-const CACHE_VERSION = 'v2.0.0';
-const CACHE_STATIC = `bakery-static-${CACHE_VERSION}`;
-const CACHE_IMAGES = `bakery-images-${CACHE_VERSION}`;
-
-const STATIC_ASSETS = [
-  './',
-  './index.html',
-  './offline.html',
-  './manifest.json',
-  './assets/css/styles.css',
-  './assets/js/app.js',
-  './assets/js/config.js'
-];
-
 self.addEventListener('install', event => {
   self.skipWaiting();
-  event.waitUntil(
-    caches.open(CACHE_STATIC).then(cache => cache.addAll(STATIC_ASSETS))
-  );
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys
-          .filter(key => key !== CACHE_STATIC && key !== CACHE_IMAGES)
-          .map(key => caches.delete(key))
-      )
-    ).then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener('fetch', event => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  if (request.method !== 'GET') return;
-
-  event.respondWith(
-    caches.match(request).then(cached => {
-      if (cached) return cached;
-
-      return fetch(request)
-        .then(response => {
-
-          if (response.ok && url.origin === self.location.origin) {
-            const cacheName = request.destination === 'image' ? CACHE_IMAGES : CACHE_STATIC;
-            caches.open(cacheName).then(cache => cache.put(request, response.clone()));
+    self.registration.unregister()
+      .then(() => self.clients.matchAll())
+      .then(clients => {
+        clients.forEach(client => {
+          if (client.url && 'navigate' in client) {
+            client.navigate(client.url);
           }
-          return response;
-        })
-        .catch(() => {
-
-          if (request.destination === 'document') {
-            return caches.match('./offline.html');
-          }
-
-          return new Response(null, { status: 408 });
         });
-    })
+      })
   );
 });

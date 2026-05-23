@@ -15,14 +15,14 @@
   <meta name="apple-mobile-web-app-title" content="Bakery">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#ff6a00">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://ve.dolarapi.com https://github.com https://cloudflareinsights.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://ve.dolarapi.com https://github.com https://cloudflareinsights.com https://fonts.googleapis.com https://fonts.gstatic.com https://ik.imagekit.io https://encrypted-tbn0.gstatic.com;">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <link rel="stylesheet" href="./assets/css/styles.css">
+  <script>document.write('<link rel="stylesheet" href="./assets/css/styles.css?v=' + Date.now() + '">');</script>
 </head>
 <body>
   <div class="app-container">
@@ -91,6 +91,10 @@
               <span id="modalCartStatus" class="modal-cart-status"></span>
             </div>
             <p id="modalDescription" class="product-description"></p>
+            <div id="modalSizeSelectorContainer" class="size-selector-container" style="display: none">
+              <span class="size-selector-label" id="sizeSelectorLabel">Bag Size:</span>
+              <div class="size-options" id="modalSizeOptions"></div>
+            </div>
             <div class="price-qty-row">
               <div id="modalPrice" class="product-price"></div>
               <div class="quantity-selector">
@@ -146,21 +150,39 @@
     <footer></footer>
   </div>
 
-  <script src="./assets/js/config.js"></script>
-  <script src="./assets/js/app.js"></script>
+  <script>document.write('<script src="./assets/js/config.js?v=' + Date.now() + '"><\/script>');</script>
+  <script>document.write('<script src="./assets/js/app.js?v=' + Date.now() + '"><\/script>');</script>
   <script>
     if (window.location.protocol.startsWith('http')) {
       const manifestLink = document.createElement('link');
       manifestLink.rel = 'manifest';
       manifestLink.href = './manifest.json';
       document.head.appendChild(manifestLink);
+    }
 
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .catch(err => {});
+    // Completely unregister service workers and clear caches to ensure the web app is always 100% updated instantly
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (let registration of registrations) {
+          registration.unregister().then(success => {
+            if (success) {
+              console.log('[PWA] Service Worker unregistered successfully.');
+            }
+          });
+        }
+      }).catch(err => {});
+    }
+
+    if ('caches' in window) {
+      caches.keys().then(keys => {
+        keys.forEach(key => {
+          caches.delete(key).then(success => {
+            if (success) {
+              console.log('[PWA] Cache storage cleared:', key);
+            }
+          });
         });
-      }
+      }).catch(err => {});
     }
   </script>
 </body>
