@@ -160,7 +160,6 @@
       document.head.appendChild(manifestLink);
     }
 
-    // Completely unregister service workers and clear caches to ensure the web app is always 100% updated instantly
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
         for (let registration of registrations) {
