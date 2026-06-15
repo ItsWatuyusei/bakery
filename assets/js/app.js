@@ -884,7 +884,7 @@ class BakeryApp {
         <img src="${this.getImagePath(Array.isArray(p.image) ? p.image[0] : p.image)}" class="autocomplete-thumb" alt="${p.name[this.currentLang]}">
         <div class="autocomplete-info">
           <span class="autocomplete-name">${p.name[this.currentLang]}</span>
-          <span class="autocomplete-price">$${p.price.toFixed(2)}</span>
+          <span class="autocomplete-price">$${this.calculatePrice(p.price).toFixed(2)}</span>
         </div>
       </div>
     `).join('');

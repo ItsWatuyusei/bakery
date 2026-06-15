@@ -368,9 +368,9 @@ const CONFIG = {
         pt: 'Delicioso amendoim caramelizado artesanal tradicional, crocante, doce e recém-caramelizado. Perfeito como um lanche doce.'
       },
       sizes: {
-        '100g': 0.6667,
-        '250g': 1.6667,
-        '500g': 3.3333
+        '100g': 0.6933,
+        '250g': 1.7333,
+        '500g': 3.4666
       }
     },
     {
@@ -386,9 +386,9 @@ const CONFIG = {
         pt: 'Amendoim artesanal tradicional coberto com sementes de gergelim caramelizadas crocantes. Uma combinação perfeita de doçura e crocância.'
       },
       sizes: {
-        '100g': 0.6667,
-        '250g': 1.6667,
-        '500g': 3.3333
+        '100g': 0.6933,
+        '250g': 1.7333,
+        '500g': 3.4666
       }
     },
     {
@@ -404,9 +404,9 @@ const CONFIG = {
         pt: 'Amendoim torrado premium levemente temperado com sal marinho fino. O clássico lanche salgado e crocante.'
       },
       sizes: {
-        '100g': 0.6667,
-        '250g': 1.6667,
-        '500g': 3.3333
+        '100g': 0.8000,
+        '250g': 2.0000,
+        '500g': 4.0000
       }
     },
     {
@@ -422,9 +422,9 @@ const CONFIG = {
         pt: 'Uma deliciosa mistura de amendoim torrado com uma variedade de temperos. O lanche crocante perfeito para qualquer ocasião.'
       },
       sizes: {
-        '100g': 0.6667,
-        '250g': 1.6667,
-        '500g': 3.3333
+        '100g': 0.6933,
+        '250g': 1.7333,
+        '500g': 3.4666
       }
     }
   ]
