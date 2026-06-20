@@ -404,9 +404,9 @@ const CONFIG = {
         pt: 'Amendoim torrado premium levemente temperado com sal marinho fino. O clássico lanche salgado e crocante.'
       },
       sizes: {
-        '100g': 0.8000,
-        '250g': 2.0000,
-        '500g': 4.0000
+        '100g': 0.6933,
+        '250g': 1.7333,
+        '500g': 3.4666
       }
     },
     {
