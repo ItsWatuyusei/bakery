@@ -17,9 +17,22 @@ class BakeryApp {
     this.init();
   }
 
-  calculatePrice(basePrice) {
-    const margin = this.config.settings?.profitMargin || 0;
+  calculatePrice(basePrice, product = null) {
+    let margin = this.config.settings?.profitMargin || 0;
+    if (product) {
+      const isPeanut = product.isPeanut || 
+                       (product.name?.es && this.normalizeText(product.name.es).includes('mani')) ||
+                       (product.id && ['prod_19', 'prod_20', 'prod_21', 'prod_22'].includes(product.id));
+      if (isPeanut && this.config.settings?.peanutProfitMargin !== undefined) {
+        margin = this.config.settings.peanutProfitMargin;
+      }
+    }
     return basePrice * (1 + (margin / 100));
+  }
+
+  normalizeText(text) {
+    if (!text) return '';
+    return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   }
 
   getImagePath(path) {
@@ -196,7 +209,7 @@ class BakeryApp {
     
     this.cart.forEach(item => {
       const qty = parseInt(item.quantity) || 1;
-      const unitPrice = this.calculatePrice(item.price);
+      const unitPrice = this.calculatePrice(item.price, item);
       subtotal += unitPrice * qty;
       totalItems += qty;
     });
@@ -220,7 +233,7 @@ class BakeryApp {
     if (!grid) return;
     const filtered = this.config.products.filter(p => {
       const matchesCategory = this.currentCategory === 'all' || p.category === this.currentCategory;
-      const matchesSearch = p.name[this.currentLang].toLowerCase().includes(this.searchQuery.toLowerCase());
+      const matchesSearch = this.normalizeText(p.name[this.currentLang]).includes(this.normalizeText(this.searchQuery));
       return matchesCategory && matchesSearch;
     });
 
@@ -237,11 +250,11 @@ class BakeryApp {
       return;
     }
     grid.innerHTML = paginatedItems.map((p, index) => {
-      let priceHTML = `$${this.calculatePrice(p.price).toFixed(2)}`;
+      let priceHTML = `$${this.calculatePrice(p.price, p).toFixed(2)}`;
       if (p.sizes) {
         const minBasePrice = Math.min(...Object.values(p.sizes));
         const fromLabel = this.config.i18n[this.currentLang].from || 'From';
-        priceHTML = `<span class="price-from">${fromLabel}</span> $${this.calculatePrice(minBasePrice).toFixed(2)}`;
+        priceHTML = `<span class="price-from">${fromLabel}</span> $${this.calculatePrice(minBasePrice, p).toFixed(2)}`;
       }
       return `
         <div class="product-card" style="animation-delay: ${index * 0.1}s" onclick="bakeryApp.openProduct('${p.id}')">
@@ -458,13 +471,12 @@ class BakeryApp {
         }).join('');
       }
       if (sizeContainer) sizeContainer.style.display = 'flex';
-      
       const basePrice = p.sizes[this.currentSize];
-      document.getElementById('modalPrice').textContent = `$${this.calculatePrice(basePrice).toFixed(2)}`;
+      document.getElementById('modalPrice').textContent = `$${this.calculatePrice(basePrice, p).toFixed(2)}`;
     } else {
       this.currentSize = null;
       if (sizeContainer) sizeContainer.style.display = 'none';
-      document.getElementById('modalPrice').textContent = `$${this.calculatePrice(p.price).toFixed(2)}`;
+      document.getElementById('modalPrice').textContent = `$${this.calculatePrice(p.price, p).toFixed(2)}`;
     }
     
     this.modalQty = 1;
@@ -499,7 +511,7 @@ class BakeryApp {
     });
     
     const basePrice = this.currentProduct.sizes[size];
-    const finalPrice = this.calculatePrice(basePrice);
+    const finalPrice = this.calculatePrice(basePrice, this.currentProduct);
     document.getElementById('modalPrice').textContent = `$${finalPrice.toFixed(2)}`;
     
     this.updateModalQtyUI();
@@ -537,7 +549,7 @@ class BakeryApp {
     const buyBtn = document.getElementById('buyButton');
     if (buyBtn && p && t) {
       const basePrice = p.sizes ? p.sizes[this.currentSize] : p.price;
-      const unitPrice = this.calculatePrice(basePrice);
+      const unitPrice = this.calculatePrice(basePrice, p);
       const subtotal = unitPrice * this.modalQty;
       
       let discount = 0;
@@ -742,7 +754,7 @@ class BakeryApp {
     
     container.innerHTML = this.cart.map((item, index) => {
       const qty = parseInt(item.quantity) || 1;
-      const unitPrice = this.calculatePrice(item.price);
+      const unitPrice = this.calculatePrice(item.price, item);
       const itemTotal = unitPrice * qty;
       
       return `
@@ -795,7 +807,7 @@ class BakeryApp {
     this.cart.forEach(item => {
       const name = item.name[this.currentLang] + (item.selectedSize ? ` (${item.selectedSize})` : '');
       const qty = parseInt(item.quantity) || 1;
-      const unitPrice = this.calculatePrice(item.price);
+      const unitPrice = this.calculatePrice(item.price, item);
       const itemTotal = unitPrice * qty;
       message += `- ${name} x${qty} ($${itemTotal.toFixed(2)})\n`;
     });
@@ -871,7 +883,7 @@ class BakeryApp {
     }
 
     const matches = this.config.products.filter(p =>
-      p.name[this.currentLang].toLowerCase().includes(query.toLowerCase())
+      this.normalizeText(p.name[this.currentLang]).includes(this.normalizeText(query))
     ).slice(0, 8);
 
     if (matches.length === 0) {
