@@ -456,11 +456,14 @@ class BakeryApp {
     const sizeLabel = document.getElementById('sizeSelectorLabel');
     
     if (p.sizes) {
-      this.currentSize = Object.keys(p.sizes).find(size => size !== '100g') || Object.keys(p.sizes)[0];
+      this.currentSize = Object.keys(p.sizes).find(size => {
+        const isDisabled = size === '100g' || (p.disabledSizes && p.disabledSizes.includes(size));
+        return !isDisabled;
+      }) || Object.keys(p.sizes)[0];
       if (sizeLabel) sizeLabel.textContent = t.sizeLabel || 'Bag Size:';
       if (sizeOptions) {
         sizeOptions.innerHTML = Object.keys(p.sizes).map(size => {
-          const isDisabled = size === '100g';
+          const isDisabled = size === '100g' || (p.disabledSizes && p.disabledSizes.includes(size));
           return `
             <button class="size-option-btn ${size === this.currentSize ? 'active' : ''} ${isDisabled ? 'disabled' : ''}" 
                     ${isDisabled ? 'disabled' : ''} 
