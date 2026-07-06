@@ -431,6 +431,24 @@ const CONFIG = {
         '500g': 3.3333
       },
       isPeanut: true
+    },
+    {
+      id: 'prod_23',
+      name: { en: 'Dry Pasta Cookies', es: 'Galletas de Pasta Seca', pt: 'Biscoitos de Pasta Seca' },
+      category: 'sweet',
+      price: 0.6667,
+      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ68nGWhrf7vlj4HTfVvoBAMrAoM0YQsa33Uc_qBkFVAQzmvMSfjysZyz95&s=10',
+      description: {
+        en: 'Delicious traditional dry pasta cookies, crispy and delicate. Perfect for tea time.',
+        es: 'Deliciosas galletas tradicionales de pasta seca, crujientes y delicadas. Perfectas para acompañar el té o café.',
+        pt: 'Deliciosos biscoitos tradicionais de pasta seca, crocantes e delicados. Perfeitos para acompanhar chá ou café.'
+      },
+      sizes: {
+        '6 unidades': 0.6667,
+        '12 unidades': 1.3333,
+        '24 unidades': 2.6667
+      },
+      disabledSizes: ['6 unidades']
     }
   ]
 };
