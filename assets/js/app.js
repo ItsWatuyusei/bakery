@@ -843,6 +843,9 @@ class BakeryApp {
       const cartToggle = document.getElementById('cartToggle');
       const langToggle = document.getElementById('langToggle');
 
+      const grid = document.getElementById('productsGrid');
+      const threshold = grid ? (grid.getBoundingClientRect().top + window.scrollY - 80) : 350;
+
       if (progress) progress.style.width = scrolled + "%";
       if (backToTop) {
         if (winScroll > 300) {
@@ -852,14 +855,14 @@ class BakeryApp {
         }
       }
       if (cartToggle) {
-        if (winScroll > 200 && this.cart.length > 0) {
+        if (winScroll > threshold && this.cart.length > 0) {
           cartToggle.classList.add('sticky');
         } else {
           cartToggle.classList.remove('sticky');
         }
       }
       if (langToggle) {
-        if (winScroll > 200) {
+        if (winScroll > threshold) {
           langToggle.classList.add('sticky');
         } else {
           langToggle.classList.remove('sticky');
