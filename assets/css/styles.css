@@ -79,7 +79,7 @@ body::before {
 }
 
 header {
-  padding: 4rem 2rem 6rem;
+  padding: 3rem 1.5rem 4rem;
   text-align: center;
   position: relative;
   z-index: 10;
@@ -190,7 +190,7 @@ body.dark-mode .moon-icon {
 }
 
 h1 {
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   margin-bottom: 1rem;
@@ -288,12 +288,12 @@ h1 {
 
 #searchInput {
   width: 100%;
-  padding: 1.25rem 2rem;
+  padding: 0.9rem 1.5rem;
   border-radius: 100px;
   border: 1px solid var(--border);
   background-color: var(--card);
   color: var(--foreground);
-  font-size: 1.1rem;
+  font-size: 1rem;
   box-shadow: var(--shadow);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -315,7 +315,7 @@ h1 {
 }
 
 .filter-btn {
-  padding: 0.75rem 2rem;
+  padding: 0.6rem 1.5rem;
   border-radius: 100px;
   border: 1px solid var(--border);
   background-color: var(--card);
@@ -323,7 +323,7 @@ h1 {
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .filter-btn:hover {
@@ -340,8 +340,8 @@ h1 {
 
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 3rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
   padding: 0 2rem;
   max-width: 1300px;
   margin: 0 auto 3rem;
@@ -400,7 +400,7 @@ h1 {
 }
 
 .product-info {
-  padding: 2rem;
+  padding: 1.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -416,15 +416,15 @@ h1 {
 }
 
 .product-name {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
   color: var(--card-foreground);
   line-height: 1.2;
 }
 
 .product-price {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--foreground);
   display: flex;
@@ -1166,30 +1166,31 @@ footer a:hover {
 }
 
 @media (max-width: 768px) {
-  h1 { font-size: 2.5rem; }
-  .products-grid { gap: 1.5rem; padding: 0 1rem; }
+  h1 { font-size: 2.2rem; }
+  .products-grid { gap: 1.25rem; padding: 0 1rem; }
   .modal-body { grid-template-columns: 1fr; }
-  .modal-details { padding: 2rem; }
+  .modal-details { padding: 1.5rem; }
   .modal { padding: 1rem; }
   .modal-image-container { aspect-ratio: 16/9; }
 }
 
 @media (max-width: 480px) {
-  header { padding: 1.5rem 1rem 3rem; }
-  h1 { font-size: 2rem; }
-  .filters { gap: 0.5rem; margin-bottom: 2.5rem; }
-  .filter-btn { padding: 0.6rem 1.2rem; font-size: 0.85rem; }
+  header { padding: 1.25rem 0.75rem 2.5rem; }
+  h1 { font-size: 1.75rem; }
+  .filters { gap: 0.4rem; margin-bottom: 2rem; }
+  .filter-btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
   .product-card { border-radius: 12px; }
-  .product-info { padding: 1.5rem; }
-  .product-name { font-size: 1.25rem; }
+  .product-info { padding: 1rem; }
+  .product-name { font-size: 1.1rem; }
+  .product-price { font-size: 1.15rem; }
   .modal { padding: 0.5rem; align-items: center; }
   .modal-content { 
     max-height: 90vh; 
     overflow: hidden; 
     border-radius: 20px; 
   }
-  .modal-details { padding: 1.25rem; }
-  .close-modal { top: 0.75rem; right: 0.75rem; width: 34px; height: 34px; font-size: 1.2rem; }
+  .modal-details { padding: 1rem; }
+  .close-modal { top: 0.5rem; right: 0.5rem; width: 32px; height: 32px; font-size: 1.1rem; }
 }
 
 @media (hover: none) {
@@ -1200,7 +1201,7 @@ footer a:hover {
 .product-badge {
   position: absolute;
   top: 1rem;
-  right: 1rem;
+  left: 1rem;
   padding: 0.4rem 0.8rem;
   border-radius: 2rem;
   font-size: 0.75rem;
