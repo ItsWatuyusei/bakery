@@ -10,7 +10,7 @@ class BakeryApp {
     this.currentCategory = 'all';
     this.searchQuery = '';
     this.currentPage = 1;
-    this.itemsPerPage = 9;
+    this.itemsPerPage = 8;
     this.promoIndex = 0;
     this.cart = JSON.parse(localStorage.getItem('bakery_cart')) || [];
     this.modalQty = 1;
